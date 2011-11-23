@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module>
+  <!-- Inherit our applications main module.                      -->
+  <inherits name='com.example.test.task.testtask' />
+
+  <!-- Specify the path to any remote services.                   -->
+  <servlet path="/testtask/greet" class="com.example.test.task.server.GreetingServiceImpl" />
+
+</module>
