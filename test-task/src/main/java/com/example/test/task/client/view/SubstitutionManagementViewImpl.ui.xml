@@ -1,0 +1,25 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:a="urn:import:com.google.gwt.dev.asm"
+	xmlns:p1="urn:import:com.google.gwt.user.cellview.client">
+	<ui:style>
+		/* Add CSS here. See the GWT docs on UI Binder for more details */
+		.important {
+			font-weight: bold;
+		}
+	</ui:style>
+	<g:VerticalPanel spacing="3" height="20">
+		<g:Label text="This people can work on behalf of you" height="20px"
+			horizontalAlignment="ALIGN_LEFT" />
+		<g:Label text="" ui:field="loadingLable" height="20px"
+			direction="LTR" />
+		<g:FlowPanel height="100px">
+			<g:PushButton text="Create" ui:field="createButton" />
+			<g:PushButton text="Update" ui:field="updateButton"
+				enabled="false" />
+			<g:PushButton text="Delete" ui:field="deleteButton"
+				enabled="false" />
+		</g:FlowPanel>
+		<p1:CellTable ui:field="table" />
+	</g:VerticalPanel>
+</ui:UiBinder> 

@@ -43,7 +43,7 @@ public class GwtTesttesttask extends GWTTestCase {
    */
   public void testGreetingService() {
     // Create the service that we will test.
-    GreetingServiceAsync greetingService = GWT.create(GreetingService.class);
+    SubstitutionManagementServiceAsync greetingService = GWT.create(SubstitutionManagementService.class);
     ServiceDefTarget target = (ServiceDefTarget) greetingService;
     target.setServiceEntryPoint(GWT.getModuleBaseURL() + "testtask/greet");
 
@@ -52,23 +52,6 @@ public class GwtTesttesttask extends GWTTestCase {
     // up to 10 seconds before timing out.
     delayTestFinish(10000);
 
-    // Send a request to the server.
-    greetingService.greetServer("GWT User", new AsyncCallback<String>() {
-      public void onFailure(Throwable caught) {
-        // The request resulted in an unexpected error.
-        fail("Request failure: " + caught.getMessage());
-      }
-
-      public void onSuccess(String result) {
-        // Verify that the response is correct.
-        assertTrue(result.startsWith("Hello, GWT User!"));
-
-        // Now that we have received a response, we need to tell the test runner
-        // that the test is complete. You must call finishTest() after an
-        // asynchronous test finishes successfully, or the test will time out.
-        finishTest();
-      }
-    });
   }
 
 
