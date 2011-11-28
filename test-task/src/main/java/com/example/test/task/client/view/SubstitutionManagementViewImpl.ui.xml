@@ -15,8 +15,7 @@
 			direction="LTR" />
 		<g:FlowPanel height="100px">
 			<g:PushButton text="Create" ui:field="createButton" />
-			<g:PushButton text="Update" ui:field="updateButton"
-				enabled="false" />
+			<g:PushButton text="Update" ui:field="updateButton" enabled="false" />
 			<g:PushButton text="Delete" ui:field="deleteButton"
 				enabled="false" />
 		</g:FlowPanel>

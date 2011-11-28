@@ -2,10 +2,17 @@ package com.example.test.task.server;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import com.example.test.task.client.SubstitutionManagementService;
+import com.example.test.task.shared.IntervalableRuleType;
+import com.example.test.task.shared.NamedData;
+import com.example.test.task.shared.RuleType;
 import com.example.test.task.shared.Substitution;
+import com.example.test.task.shared.SubstitutionDetails;
 import com.google.gwt.rpc.client.impl.RemoteException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -13,44 +20,102 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * The server side implementation of the RPC service.
  */
 
+//TODO: make refactorung to extrat datasource layer
 public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 		implements SubstitutionManagementService {
 
-	public Substitution[] getSubstitutions() throws RemoteException {
+	protected Map<Integer, Substitution> data;
+
+	protected NamedData[] substitutors = new NamedData[] {
+			new NamedData(1, "Bob"), new NamedData(2, "Joe") };
+	protected NamedData[] roles = new NamedData[] {
+			new NamedData(1, "fullTimeRole"), new NamedData(2, "partTimeRole") };
+
+	protected NamedData[] ruleTypes = new NamedData[] {
+			new RuleType(1, "alwaysRuleType"),
+			new IntervalableRuleType(2, "intervalRuleType", null, null),
+			new IntervalableRuleType(3, "inactiveRuleType", null, null) };
+	
+	protected int idCounter=100;
+
+	public SubstitutionDetails[] getSubstitutions() throws RemoteException {
 		try {
-			Thread.sleep(400);
+			Thread.sleep(200);
 		} catch (InterruptedException e) {
 		}
-		List<Substitution> data=new ArrayList<Substitution>();
-		Substitution substitution1 = new Substitution(1, "Ilya", "role1",
-				"rule1", new Date(), new Date());
-		Substitution substitution2 = new Substitution(2, "Vasya", "role2",
-				"rule2", new Date(), new Date());
-		Substitution substitution3 = new Substitution(3, "Ilya", "role1",
-				"rule1", new Date(), new Date());
-		Substitution substitution4 = new Substitution(4, "Vasya", "role2",
-				"rule2", new Date(), new Date());
-		
-		
-		data.add(substitution1);
-		data.add(substitution2);
-		data.add(substitution3);
-		data.add(substitution4);
-		return data.toArray(new Substitution[]{});
+
+		List<SubstitutionDetails> substitutions = new ArrayList<SubstitutionDetails>();
+		for (Entry<Integer, Substitution> entry : getData().entrySet()) {
+			Substitution source=entry.getValue();
+			SubstitutionDetails substitutionDetails=new SubstitutionDetails();
+			substitutionDetails.setId(source.getId());
+			substitutionDetails.setName(getById(source.getSubstitutionNameId(), substitutors).getName());
+			substitutionDetails.setRole(getById(source.getRoleId(),roles).getName());
+			substitutionDetails.setRuleType(source.getRuleType().getName());
+			
+			if(source.getRuleType() instanceof IntervalableRuleType){
+				IntervalableRuleType intervalableRuleType=(IntervalableRuleType)source.getRuleType();
+				substitutionDetails.setStartDate(intervalableRuleType.getBegin());
+				substitutionDetails.setEndDate(intervalableRuleType.getEnd());
+			}
+			
+			substitutions.add(substitutionDetails);
+		}
+
+		return substitutions.toArray(new SubstitutionDetails[] {});
 	}
 
 	public int saveSubstitution(Substitution substitution)
 			throws RemoteException {
-		// TODO Auto-generated method stub
-		return 0;
+		if(substitution.getId()<=0){
+			substitution.setId(idCounter++);
+		}
+		data.put(substitution.getId(),substitution);
+		return idCounter++;
 	}
 
 	public Substitution getSubstitution(int id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		return data.get(id);
 	}
 
-	public void deleteSubstitution(int id) throws RemoteException {
-		// TODO Auto-generated method stub
+	public SubstitutionDetails[] deleteSubstitution(Integer[] ids)
+			throws RemoteException {
+		for (Integer id : ids) {
+			getData().remove(id);
+		}
+		return getSubstitutions();
+	}
+
+	protected Map<Integer, Substitution> getData() {
+		if (data == null) {
+			data = new HashMap<Integer, Substitution>();
+			Substitution substitution1 = new Substitution(1,1,1,(RuleType)ruleTypes[1]);
+			Substitution substitution2 = new Substitution(2,1,1,(RuleType)ruleTypes[1]);
+			Substitution substitution3 = new Substitution(3,1,1,(RuleType)ruleTypes[1]);
+			Substitution substitution4 = new Substitution(4,1,1,(RuleType)ruleTypes[1]);			
+			
+			data.put(substitution1.getId(), substitution1);
+			data.put(substitution2.getId(), substitution2);
+			data.put(substitution3.getId(), substitution3);
+			data.put(substitution4.getId(), substitution4);
+
+		}
+		return data;
+	}
+
+	public Map<String, NamedData[]> getAllNamedData() {
+		HashMap<String, NamedData[]> hashMap=new HashMap<String, NamedData[]>();
+		hashMap.put("substitutors",substitutors);
+		hashMap.put("roles",roles);
+		hashMap.put("ruleTypes", ruleTypes);
+		return hashMap;
+	}
+	
+	private NamedData getById(Integer id, NamedData[] namedDatas){
+		for(NamedData namedData:namedDatas){
+			if(id.equals(namedData.getId()))
+				return namedData;
+		}
+		return null;
 	}
 }

@@ -1,78 +1,40 @@
 package com.example.test.task.shared;
 
 import java.io.Serializable;
-import java.util.Date;
 
-public class Substitution implements Serializable {
-	private static final long serialVersionUID = -9127568820814721368L;
+public class Substitution extends DataObject implements Serializable{
 
-	int id;
-	String name;
-	String role;
-	String ruleType;
-	Date startDate;
-	Date endDate;
-
-	public int getId() {
-		return id;
+	private static final long serialVersionUID = -2801786595784092447L;
+	int substitutionNameId;
+	int roleId;
+	RuleType ruleType;
+	public int getSubstitutionNameId() {
+		return substitutionNameId;
 	}
-
-	public void setId(int id) {
-		this.id = id;
+	public void setSubstitutionNameId(int substitutionNameId) {
+		this.substitutionNameId = substitutionNameId;
 	}
-
-	public String getName() {
-		return name;
+	public int getRoleId() {
+		return roleId;
 	}
-
-	public void setName(String name) {
-		this.name = name;
+	public void setRoleId(int roleId) {
+		this.roleId = roleId;
 	}
-
-	public String getRole() {
-		return role;
-	}
-
-	public void setRole(String role) {
-		this.role = role;
-	}
-
-	public String getRuleType() {
+	public RuleType getRuleType() {
 		return ruleType;
 	}
-
-	public void setRuleType(String ruleType) {
+	public void setRuleType(RuleType ruleType) {
 		this.ruleType = ruleType;
 	}
-
-	public Date getStartDate() {
-		return startDate;
-	}
-
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
-	}
-
-	public Date getEndDate() {
-		return endDate;
-	}
-
-	public void setEndDate(Date endDate) {
-		this.endDate = endDate;
-	}
-
-	public Substitution(int id, String name, String role, String ruleType,
-			Date startDate, Date endDate) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.role = role;
+	public Substitution(int id, int substitutionNameId, int roleId,
+			RuleType ruleType) {
+		super(id);
+		this.substitutionNameId = substitutionNameId;
+		this.roleId = roleId;
 		this.ruleType = ruleType;
-		this.startDate = startDate;
-		this.endDate = endDate;
 	}
-
 	public Substitution() {
+		super();
 	}
-
+	
 }

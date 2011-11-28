@@ -1,37 +1,60 @@
 package com.example.test.task.client;
 
+import com.example.test.task.client.event.CreateSubstitutionEvent;
+import com.example.test.task.client.event.CreateSubstitutionEventHandler;
+import com.example.test.task.client.event.EditSubstitutionEvent;
+import com.example.test.task.client.event.EditSubstitutionEventHandler;
+import com.example.test.task.client.event.UpdateDataEvent;
+import com.example.test.task.client.event.UpdateDataEventHandler;
+import com.example.test.task.client.presenter.EditSubstitutionPresenter;
 import com.example.test.task.client.presenter.SubstitutionManagementPresenter;
+import com.example.test.task.client.view.EditSubstitutionViewImpl;
 import com.example.test.task.client.view.SubstitutionManagementViewImpl;
-import com.example.test.task.shared.Substitution;
+import com.example.test.task.shared.SubstitutionDetails;
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class TestTask implements EntryPoint {
-  /**
-   * The message displayed to the user when the server cannot be reached or
-   * returns an error.
-   */
-  private static final String SERVER_ERROR = "An error occurred while "
-      + "attempting to contact the server. Please check your network "
-      + "connection and try again.";
+	/**
+	 * The message displayed to the user when the server cannot be reached or
+	 * returns an error.
+	 */
+	private static final String SERVER_ERROR = "An error occurred while "
+			+ "attempting to contact the server. Please check your network "
+			+ "connection and try again.";
 
-  /**
-   * Create a remote service proxy to talk to the server-side Greeting service.
-   */
-  private final SubstitutionManagementServiceAsync substitutionService = GWT.create(SubstitutionManagementService.class);
+	/**
+	 * Create a remote service proxy to talk to the server-side Greeting
+	 * service.
+	 */
+	private final SubstitutionManagementServiceAsync substitutionService = GWT
+			.create(SubstitutionManagementService.class);
 
-  private final Messages messages = GWT.create(Messages.class);
+	private final Messages messages = GWT.create(Messages.class);
 
-  /**
-   * This is the entry point method.
-   */
-  public void onModuleLoad() {
-	  SubstitutionManagementViewImpl<Substitution> view=new SubstitutionManagementViewImpl<Substitution>();
-	  SubstitutionManagementPresenter presenter=new SubstitutionManagementPresenter(view,substitutionService);
-	  presenter.go(RootPanel.get());
-  }
+	private EventBus eventBus = new SimpleEventBus();
+
+	EditSubstitutionPresenter editSubstitutionPresenter = null;
+
+	/**
+	 * This is the entry point method.
+	 */
+	public void onModuleLoad() {
+		SubstitutionManagementViewImpl<SubstitutionDetails> view = new SubstitutionManagementViewImpl<SubstitutionDetails>();
+		SubstitutionManagementPresenter presenter = new SubstitutionManagementPresenter(
+				view, substitutionService, eventBus);
+		presenter.go(RootPanel.get());
+
+		EditSubstitutionViewImpl editSubstitutionViewImpl = new EditSubstitutionViewImpl();
+		editSubstitutionPresenter = new EditSubstitutionPresenter(eventBus,
+				editSubstitutionViewImpl, substitutionService);
+
+
+	}
 }

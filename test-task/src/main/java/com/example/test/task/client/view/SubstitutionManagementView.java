@@ -17,8 +17,6 @@ public interface SubstitutionManagementView<T> extends IsWidget {
 
 	void setData(List<T> items);
 
-	int getSelectedItemId();
-
 	List<Integer> getCheckedItemIds();
 
 	void setPresenter(Presenter<T> presenter);

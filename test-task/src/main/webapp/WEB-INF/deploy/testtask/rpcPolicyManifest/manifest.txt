@@ -1,2 +1,3 @@
 # Module testtask
 # RPC service class, partial path of RPC policy file
+com.example.test.task.client.SubstitutionManagementService, 9F98F5F5C15EEA1961F4FCCAD69F33C1.gwt.rpc
