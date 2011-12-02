@@ -1,9 +1,9 @@
 package com.example.test.task.client.view;
 
-import com.example.test.task.shared.IntervalableRuleType;
-import com.example.test.task.shared.NamedData;
-import com.example.test.task.shared.RuleType;
-import com.example.test.task.shared.Substitution;
+import java.util.Date;
+import java.util.Map;
+import java.util.Map.Entry;
+
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -11,8 +11,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.datepicker.client.DateBox;
 
@@ -25,11 +25,11 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 	@UiField
 	PushButton saveButton;
 	@UiField
-	ComplexObjectListBox<NamedData> roleLbx;
+	ListBox roleLbx;
 	@UiField
-	ComplexObjectListBox<NamedData> substituteLbx;
+	ListBox substituteLbx;
 	@UiField
-	ComplexObjectListBox<NamedData> ruleTypeLbx;
+	ListBox ruleTypeLbx;
 	@UiField
 	DateBox beginDbx;
 	@UiField
@@ -40,10 +40,6 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	Presenter presenter;
 
-	NamedData[] ruleTypes;
-
-	Substitution substitution;
-
 	interface EditSubstitutionViewImplUiBinder extends
 			UiBinder<DialogBox, EditSubstitutionViewImpl> {
 	}
@@ -52,19 +48,7 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 		dialogBox = uiBinder.createAndBindUi(this);
 		ruleTypeLbx.addChangeHandler(new ChangeHandler() {
 			public void onChange(ChangeEvent event) {
-				String selectedItem = ruleTypeLbx.getValue(ruleTypeLbx
-						.getSelectedIndex());
-				for (NamedData ruleType : ruleTypes) {
-					if (selectedItem.equals(Integer.toString(ruleType.getId()))) {
-						if (ruleType instanceof IntervalableRuleType) {
-							beginDbx.setEnabled(true);
-							endDbx.setEnabled(true);
-						} else {
-							beginDbx.setEnabled(false);
-							endDbx.setEnabled(false);
-						}
-					}
-				}
+				presenter.onRuleTypesSelection();
 			}
 		});
 	}
@@ -73,93 +57,7 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 		this.presenter = presenter;
 	}
 
-	public void setRoles(NamedData[] roles) {
-		roleLbx.clear();
-		// TODO: localize
-		roleLbx.addObjectItem("", "", null);
-		for (NamedData namedData : roles)
-			roleLbx.addObjectItem(namedData.getName(),
-					Integer.toString(namedData.getId()), namedData);
 
-	}
-
-	public void setSubstituteNames(NamedData[] substituteNames) {
-		// TODO: localize
-		substituteLbx.clear();
-		for (NamedData namedData : substituteNames) {
-			substituteLbx.addObjectItem(namedData.getName(),
-					Integer.toString(namedData.getId()), namedData);
-		}
-	}
-
-	public void setRuleTypes(NamedData[] ruleTypes) {
-		// TODO: localize
-		this.ruleTypes = ruleTypes;
-		ruleTypeLbx.clear();
-		for (NamedData namedData : ruleTypes) {
-			ruleTypeLbx.addObjectItem(namedData.getName(),
-					Integer.toString(namedData.getId()), namedData);
-		}
-		ruleTypeLbx.fireEvent(GWT.<ChangeEvent> create(ChangeEvent.class));
-	}
-
-	public void setData(Substitution substitution) {
-		if (substitution == null) {
-			this.substitution = substitution;
-			roleLbx.setSelectedValue("");
-		} else {
-			// TODO: localize
-			this.substitution = substitution;
-			roleLbx.setSelectedValue(substitution.getRoleId());
-			substituteLbx
-					.setSelectedValue(substitution.getSubstitutionNameId());
-			ruleTypeLbx.setSelectedValue(substitution.getRuleType().getId());
-
-			if (substitution.getRuleType() instanceof IntervalableRuleType) {
-				IntervalableRuleType ruleType = (IntervalableRuleType) substitution
-						.getRuleType();
-				beginDbx.setEnabled(true);
-				endDbx.setEnabled(true);
-				beginDbx.setValue(ruleType.getBegin());
-				endDbx.setValue(ruleType.getEnd());
-			} else {
-				beginDbx.setEnabled(false);
-				endDbx.setEnabled(false);
-			}
-		}
-	}
-
-	public Substitution getSubstitution() {
-		// TODO: validation
-		if (substitution == null) {
-			substitution = new Substitution();
-		}
-
-		if (roleLbx.getSelectedObject() == null
-				|| substituteLbx.getSelectedObject() == null
-				|| ruleTypeLbx.getSelectedObject() == null
-				|| beginDbx.getValue() == null || endDbx.getValue() == null) {
-			Window.alert("Please fill all fields");
-			return null;
-		}
-		substitution.setRoleId(roleLbx.getSelectedObject().getId());
-		substitution.setSubstitutionNameId(substituteLbx.getSelectedObject()
-				.getId());
-		// substitution.set
-		if (ruleTypeLbx.getSelectedObject() instanceof IntervalableRuleType) {
-			IntervalableRuleType source = (IntervalableRuleType) ruleTypeLbx
-					.getSelectedObject();
-			IntervalableRuleType dest = new IntervalableRuleType(
-					source.getId(), source.getName(), beginDbx.getValue(),
-					endDbx.getValue());
-			substitution.setRuleType(dest);
-		} else {
-			substitution
-					.setRuleType((RuleType) ruleTypeLbx.getSelectedObject());
-		}
-
-		return substitution;
-	}
 
 	public void go() {
 		dialogBox.center();
@@ -168,19 +66,103 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	@UiHandler("cancelButton")
 	void onCancelButtonClick(ClickEvent event) {
+		presenter.onCancelAction();
+
+		//TODO: if should be here?
 		dialogBox.hide();
 	}
 
 	@UiHandler("saveButton")
 	void onSaveButtonClick(ClickEvent event) {
-		presenter.onSaveClick();
+		presenter.onSaveAction();
 	}
 
 	public void dataSaved() {
 		dialogBox.hide();
 	}
 
-	public void dataSavingError(Throwable throwable) {
-		Window.alert("Error during saving data" + throwable.getMessage());
+	public void setRoles(Map<String, String> roles) {
+		roleLbx.clear();
+		fillListBoxState(roles,roleLbx);
+	}
+
+	public void setSubstitors(Map<String, String> substitutors) {
+		substituteLbx.clear();
+		fillListBoxState(substitutors,substituteLbx);
+	}
+
+	public void setRuleTypes(Map<String, String> ruleTypes) {
+		ruleTypeLbx.clear();
+		fillListBoxState(ruleTypes,ruleTypeLbx);
+	}
+
+	public void setBeginDate(Date beginDate) {
+		beginDbx.setValue(beginDate);
+	}
+
+	public void setEndDate(Date endDate) {
+		endDbx.setValue(endDate);
+	}
+
+	public void setTimeIntervalEnabled(boolean isTimeIntervalEnabled) {
+		beginDbx.setEnabled(isTimeIntervalEnabled);
+		endDbx.setEnabled(isTimeIntervalEnabled);
+	}
+	
+	private void fillListBoxState(Map<String,String> data,ListBox listBox){
+		for(Entry<String, String> entry:data.entrySet()){
+			listBox.addItem(entry.getKey(), entry.getValue());
+		}
+	}
+	
+	private void setSelectedItemByValue(ListBox listBox, String value){
+		for(int i=0;i<listBox.getItemCount();i++){
+			if(value.equals(listBox.getValue(i)))
+				listBox.setSelectedIndex(i);
+		}
+	}
+
+	public String getRole() {
+		return roleLbx.getValue(roleLbx.getSelectedIndex());
+	}
+
+	public String getSubstituror() {
+		return substituteLbx.getValue(substituteLbx.getSelectedIndex());
+	}
+
+	public String getRuleType() {
+		return ruleTypeLbx.getValue(ruleTypeLbx.getSelectedIndex());
+	}
+
+	public Date getBeginDate() {
+		return beginDbx.getValue();
+	}
+
+	public Date getEndDate() {
+		return endDbx.getValue();
+	}
+
+	public void setRole(String id) {
+		setSelectedItemByValue(roleLbx, id);
+	}
+
+	public void setSubstitutor(String id) {
+		setSelectedItemByValue(substituteLbx, id);
+	}
+
+	public void setRuleType(String id) {
+		setSelectedItemByValue(ruleTypeLbx, id);
+	}
+
+	public void setCancelControllEnabled(boolean enabled) {
+		cancelButton.setEnabled(enabled);
+	}
+
+	public void setSaveControllEnabled(boolean enabled) {
+		saveButton.setEnabled(enabled);
+	}
+
+	public void onDataSavingOk() {
+		dialogBox.hide();
 	}
 }

@@ -5,6 +5,7 @@ import java.util.Map;
 
 import com.google.gwt.user.client.ui.ListBox;
 
+@Deprecated
 public class ComplexObjectListBox<T> extends ListBox {
 	/**
 	 * Map to store data binding value/id usually <-> object.

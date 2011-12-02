@@ -1,7 +1,6 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client"
-	xmlns:my="urn:import:com.example.test.task.client.view">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client">
 
 	<ui:style>
 		.important {
@@ -17,7 +16,7 @@
 						<g:Label text="Role:" />
 					</g:customCell>
 					<g:customCell>
-						<my:ComplexObjectListBox ui:field="roleLbx"/>
+						<g:ListBox ui:field="roleLbx" />
 					</g:customCell>
 				</g:row>
 				<g:row>
@@ -25,7 +24,7 @@
 						<g:Label text="Substitute:" />
 					</g:customCell>
 					<g:customCell>
-						<my:ComplexObjectListBox ui:field="substituteLbx" />
+						<g:ListBox ui:field="substituteLbx" />
 					</g:customCell>
 				</g:row>
 				<g:row>
@@ -33,7 +32,7 @@
 						<g:Label text="Rule type:" />
 					</g:customCell>
 					<g:customCell>
-						<my:ComplexObjectListBox ui:field="ruleTypeLbx" />
+						<g:ListBox ui:field="ruleTypeLbx" />
 					</g:customCell>
 				</g:row>
 				<g:row>

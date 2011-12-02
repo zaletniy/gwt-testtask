@@ -2,6 +2,7 @@ package com.example.test.task.client;
 
 import java.util.Map;
 
+import com.example.test.task.shared.EditViewReferenceData;
 import com.example.test.task.shared.NamedData;
 import com.example.test.task.shared.Substitution;
 import com.example.test.task.shared.SubstitutionDetails;
@@ -18,6 +19,6 @@ public interface SubstitutionManagementService extends RemoteService {
 	Substitution getSubstitution(int id);
 	SubstitutionDetails[] deleteSubstitution(Integer[] ids);
 	
-	Map<String, NamedData[]> getAllNamedData();
+	EditViewReferenceData getAllNamedData();
 	
 }

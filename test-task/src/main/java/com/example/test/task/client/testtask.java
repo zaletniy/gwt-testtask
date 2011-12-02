@@ -1,14 +1,10 @@
 package com.example.test.task.client;
 
-import com.example.test.task.client.event.CreateSubstitutionEvent;
-import com.example.test.task.client.event.CreateSubstitutionEventHandler;
-import com.example.test.task.client.event.EditSubstitutionEvent;
-import com.example.test.task.client.event.EditSubstitutionEventHandler;
-import com.example.test.task.client.event.UpdateDataEvent;
-import com.example.test.task.client.event.UpdateDataEventHandler;
 import com.example.test.task.client.presenter.EditSubstitutionPresenter;
 import com.example.test.task.client.presenter.SubstitutionManagementPresenter;
 import com.example.test.task.client.view.EditSubstitutionViewImpl;
+import com.example.test.task.client.view.SpanStatusIndicator;
+import com.example.test.task.client.view.StatusIndicator;
 import com.example.test.task.client.view.SubstitutionManagementViewImpl;
 import com.example.test.task.shared.SubstitutionDetails;
 import com.google.gwt.core.client.EntryPoint;
@@ -39,6 +35,8 @@ public class TestTask implements EntryPoint {
 	private final Messages messages = GWT.create(Messages.class);
 
 	private EventBus eventBus = new SimpleEventBus();
+	
+	private StatusIndicator statusIndicator=new SpanStatusIndicator();
 
 	EditSubstitutionPresenter editSubstitutionPresenter = null;
 
@@ -49,11 +47,11 @@ public class TestTask implements EntryPoint {
 		SubstitutionManagementViewImpl<SubstitutionDetails> view = new SubstitutionManagementViewImpl<SubstitutionDetails>();
 		SubstitutionManagementPresenter presenter = new SubstitutionManagementPresenter(
 				view, substitutionService, eventBus);
-		presenter.go(RootPanel.get());
+		presenter.go(RootPanel.get("application"));
 
 		EditSubstitutionViewImpl editSubstitutionViewImpl = new EditSubstitutionViewImpl();
 		editSubstitutionPresenter = new EditSubstitutionPresenter(eventBus,
-				editSubstitutionViewImpl, substitutionService);
+				editSubstitutionViewImpl,statusIndicator,substitutionService);
 
 
 	}
