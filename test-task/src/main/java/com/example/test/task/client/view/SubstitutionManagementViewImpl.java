@@ -18,8 +18,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.Handler;
-import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.Widget;
@@ -55,16 +53,8 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	
 	MultiSelectionModel<T> selectionModel;
 	
-	@Deprecated
-	LinkedHashMap<String, Comparator<T>> comparators;
-	
 	MutableListHandler<T> sortHandler;
 	
-	/*
-	public static final ProvidesKey<SubstitutionDetails> KEY_PROVIDER = 
-	};
-	*/
-
 	@SuppressWarnings("rawtypes")
 	interface SubstitutionManagementViewImplUiBinder extends
 			UiBinder<Widget, SubstitutionManagementViewImpl> {
@@ -80,115 +70,7 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 		listDataProvider.setList(items);
 		sortHandler.setData(listDataProvider.getList());
 		table.setRowCount(items.size());
-		
-		/*
-		ListDataProvider<SubstitutionDetails> listDataProvider=new ListDataProvider<SubstitutionDetails>((List<SubstitutionDetails>)items);
-		
-		listDataProvider.addDataDisplay(table);
-		
-		final MultiSelectionModel<SubstitutionDetails> selectionModel = new MultiSelectionModel<SubstitutionDetails>(KEY_PROVIDER);
-		
-		ListHandler<SubstitutionDetails> sortHandler=new ListHandler<SubstitutionDetails>(listDataProvider.getList());
-		table.addColumnSortHandler(sortHandler);
-				
-		table.setSelectionModel(selectionModel,DefaultSelectionEventManager.<SubstitutionDetails>createCheckboxManager());
-		
-		Column<SubstitutionDetails, Boolean> checkColumn = new Column<SubstitutionDetails, Boolean>(
-				new CheckboxCell(true, false)) {
-			@Override
-			public Boolean getValue(SubstitutionDetails object) {
-				// Get the value from the selection model.
-				return selectionModel.isSelected(object);
-			}
-		};
-			
-		table.addColumn(checkColumn,"");
-		
-		// Name column
-		TextColumn<SubstitutionDetails> nameColumn=new TextColumn<SubstitutionDetails>() {
-			@Override
-			public String getValue(SubstitutionDetails object) {
-				return object.getName();
-			}
-		};
-		
-		nameColumn.setSortable(true);
-		
-		sortHandler.setComparator(nameColumn, new Comparator<SubstitutionDetails>() {
-			public int compare(SubstitutionDetails arg0, SubstitutionDetails arg1) {
-				return arg0.getName().compareTo(arg1.getName());
-			}
-		});
-		
-		table.addColumn(nameColumn,"Substitute");
-		
-		TextColumn<SubstitutionDetails> roleColumn=new TextColumn<SubstitutionDetails>() {
-			@Override
-			public String getValue(SubstitutionDetails object) {
-				return object.getRole();
-			}
-		};
-		
-		roleColumn.setSortable(true);
-		
-		table.addColumn(roleColumn,"Role");
-		sortHandler.setComparator(roleColumn, new Comparator<SubstitutionDetails>() {
-			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
-				return o1.getRole().compareTo(o2.getRole());
-			}
-		});
-		
-		
-		table.addColumn(new TextColumn<SubstitutionDetails>() {
-			@Override
-			public String getValue(SubstitutionDetails object) {
-				return object.getRuleType();
-			}
-		},"Rule type");
-		
-		table.addColumn(new TextColumn<SubstitutionDetails>() {
-			@Override
-			public String getValue(SubstitutionDetails object) {
-				//FIXME: localize date formatting
-				//TODO: column should be sortable by date, so it is shouldn't be a text
-				return object.getStartDate()!=null?object.getStartDate().toString():"";
-			}
-		},"Begin");
-		
-		table.addColumn(new TextColumn<SubstitutionDetails>() {
-			@Override
-			public String getValue(SubstitutionDetails object) {
-				//FIXME: localize date formatting
-				return object.getStartDate()!=null?object.getStartDate().toString():"";
-			}
-		},"End");
-		
-		
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-			public void onSelectionChange(SelectionChangeEvent event) {
-				Set<SubstitutionDetails> selectedSet=selectionModel.getSelectedSet();
-				if(selectedSet.size()==0){
-					updateButton.setEnabled(false);
-					deleteButton.setEnabled(false);
-				}else{
-					if(selectedSet.size()==1){
-						updateButton.setEnabled(true);
-						deleteButton.setEnabled(true);
-					}else{
-						updateButton.setEnabled(false);
-						deleteButton.setEnabled(true);
-					}
-				}
-				
-				selectedItems.clear();
-				for(SubstitutionDetails item:selectedSet)
-					selectedItems.add(item.getId());
-			}
-		});		
-
-		table.setRowCount(items.size());
-        table.getColumnSortList().push(nameColumn);
-        */
+	
 	}
 
 	public void setPresenter(SubstitutionManagementView.Presenter<T> presenter) {
@@ -224,7 +106,6 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 
 	public void init(ProvidesKey<T> keyProvider,
 			LinkedHashMap<String, Column<T, ?>> columns,LinkedHashMap<String, Comparator<T>> comparators) {
-		//this.comparators=comparators;
 		this.keyProvider=keyProvider;
 		
 		listDataProvider.addDataDisplay(table);
