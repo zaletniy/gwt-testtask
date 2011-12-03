@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -43,111 +44,124 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	@UiField
 	PushButton deleteButton;
 	@UiField(provided = true)
-	CellTable<T> table = new CellTable<T>();
-	
+	CellTable<T> table=new CellTable<T>(10,TableResources.INSTANCE);
+
 	Presenter<T> presenter;
-	
+
 	ProvidesKey<T> keyProvider;
-	
-	ListDataProvider<T> listDataProvider=new ListDataProvider<T>();
-	
+
+	ListDataProvider<T> listDataProvider = new ListDataProvider<T>();
+
 	MultiSelectionModel<T> selectionModel;
-	
+
 	MutableListHandler<T> sortHandler;
-	
+
 	@SuppressWarnings("rawtypes")
 	interface SubstitutionManagementViewImplUiBinder extends
 			UiBinder<Widget, SubstitutionManagementViewImpl> {
+	}
+
+	/**
+	 * The resources applied to the table.
+	 */
+	interface TableResources extends CellTable.Resources {
+		public static TableResources INSTANCE=GWT.create(TableResources.class); 
+		@Source({ CellTable.Style.DEFAULT_CSS,
+				"com/example/test/task/client/SubstitutionManagementTable.css" })
+		TableStyle cellTableStyle();
+	}
+
+	/**
+	 * The styles applied to the table.
+	 */
+	interface TableStyle extends CellTable.Style {
 	}
 
 	public SubstitutionManagementViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
 	}
 
-
 	public void setData(List<T> items) {
-		
+
 		listDataProvider.setList(items);
 		sortHandler.setData(listDataProvider.getList());
 		table.setRowCount(items.size());
-	
+
 	}
 
 	public void setPresenter(SubstitutionManagementView.Presenter<T> presenter) {
 		this.presenter = presenter;
 	}
 
-
 	public void updateData() {
-		//TODO: F5 refresh button
+		// TODO: F5 refresh button
 	}
-
 
 	@UiHandler("createButton")
 	void onCreateButtonClick(ClickEvent event) {
 		presenter.onCreateAction();
 	}
-	
+
 	@UiHandler("updateButton")
 	void onUpdateButtonClick(ClickEvent event) {
 		presenter.onUpdateAction();
 	}
-	
+
 	@UiHandler("deleteButton")
 	void onDeleteButtonClick(ClickEvent event) {
 		presenter.onDeleteAction();
 	}
 
-
 	public Collection<T> getSelectedItems() {
 		return selectionModel.getSelectedSet();
 	}
 
-
 	public void init(ProvidesKey<T> keyProvider,
-			LinkedHashMap<String, Column<T, ?>> columns,LinkedHashMap<String, Comparator<T>> comparators) {
-		this.keyProvider=keyProvider;
-		
+			LinkedHashMap<String, Column<T, ?>> columns,
+			LinkedHashMap<String, Comparator<T>> comparators) {
+		this.keyProvider = keyProvider;
+
 		listDataProvider.addDataDisplay(table);
-		
+
 		selectionModel = new MultiSelectionModel<T>(keyProvider);
-		
-		sortHandler=new MutableListHandler<T>();
+
+		sortHandler = new MutableListHandler<T>();
 		table.addColumnSortHandler(sortHandler);
-		table.setSelectionModel(selectionModel,DefaultSelectionEventManager.<T>createCheckboxManager());
-		
-		//the first checkbox column
-		Column<T, Boolean> checkColumn = new Column<T, Boolean>(new CheckboxCell(true, false)) {
+		table.setSelectionModel(selectionModel,
+				DefaultSelectionEventManager.<T> createCheckboxManager());
+
+		// the first checkbox column
+		Column<T, Boolean> checkColumn = new Column<T, Boolean>(
+				new CheckboxCell(true, false)) {
 			@Override
 			public Boolean getValue(T object) {
 				return selectionModel.isSelected(object);
 			}
 		};
-			
-		table.addColumn(checkColumn,"");
-		
-		for(Entry<String, Column<T, ?>> entry:columns.entrySet()){
-			table.addColumn(entry.getValue(),entry.getKey());
-			sortHandler.setComparator(entry.getValue(), comparators.get(entry.getKey()));
-		}
-		
-		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
-			public void onSelectionChange(SelectionChangeEvent event) {
-				Set<T> selectedSet=selectionModel.getSelectedSet();
-				presenter.onSelect(selectedSet);
-			}
-		});		
-	}
 
+		table.addColumn(checkColumn, "");
+
+		for (Entry<String, Column<T, ?>> entry : columns.entrySet()) {
+			table.addColumn(entry.getValue(), entry.getKey());
+			sortHandler.setComparator(entry.getValue(),
+					comparators.get(entry.getKey()));
+		}
+
+		selectionModel
+				.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+					public void onSelectionChange(SelectionChangeEvent event) {
+						Set<T> selectedSet = selectionModel.getSelectedSet();
+						presenter.onSelect(selectedSet);
+					}
+				});
+	}
 
 	public void enableUpdateControl(boolean enabled) {
 		updateButton.setEnabled(enabled);
 	}
 
-
 	public void enableDeleteControl(boolean enabled) {
 		deleteButton.setEnabled(enabled);
 	}
-
 
 }
