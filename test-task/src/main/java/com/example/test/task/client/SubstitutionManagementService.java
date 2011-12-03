@@ -1,9 +1,8 @@
 package com.example.test.task.client;
 
-import java.util.Map;
+import java.util.List;
 
 import com.example.test.task.shared.EditViewReferenceData;
-import com.example.test.task.shared.NamedData;
 import com.example.test.task.shared.Substitution;
 import com.example.test.task.shared.SubstitutionDetails;
 import com.google.gwt.user.client.rpc.RemoteService;
@@ -14,10 +13,10 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  */
 @RemoteServiceRelativePath("substitution")
 public interface SubstitutionManagementService extends RemoteService {
-	SubstitutionDetails[] getSubstitutions();
+	List<SubstitutionDetails> getSubstitutions();
 	int saveSubstitution(Substitution substitution);
 	Substitution getSubstitution(int id);
-	SubstitutionDetails[] deleteSubstitution(Integer[] ids);
+	List<SubstitutionDetails> deleteSubstitution(List<Integer> ids);
 	
 	EditViewReferenceData getAllNamedData();
 	

@@ -9,7 +9,7 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	String name;
 	String role;
 	String ruleType;
-	Date startDate;
+	Date beginDate;
 	Date endDate;
 
 	public String getName() {
@@ -36,12 +36,12 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 		this.ruleType = ruleType;
 	}
 
-	public Date getStartDate() {
-		return startDate;
+	public Date getBeginDate() {
+		return beginDate;
 	}
 
-	public void setStartDate(Date startDate) {
-		this.startDate = startDate;
+	public void setBeginDate(Date startDate) {
+		this.beginDate = startDate;
 	}
 
 	public Date getEndDate() {
@@ -53,13 +53,13 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	}
 
 	public SubstitutionDetails(int id, String name, String role, String ruleType,
-			Date startDate, Date endDate) {
+			Date beginDate, Date endDate) {
 		super(id);
 		this.id = id;
 		this.name = name;
 		this.role = role;
 		this.ruleType = ruleType;
-		this.startDate = startDate;
+		this.beginDate = beginDate;
 		this.endDate = endDate;
 	}
 

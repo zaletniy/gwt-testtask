@@ -1,6 +1,9 @@
 package com.example.test.task.client.presenter;
 
-import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.example.test.task.client.SubstitutionManagementServiceAsync;
@@ -8,31 +11,38 @@ import com.example.test.task.client.event.CreateSubstitutionEvent;
 import com.example.test.task.client.event.EditSubstitutionEvent;
 import com.example.test.task.client.event.UpdateDataEvent;
 import com.example.test.task.client.event.UpdateDataEventHandler;
+import com.example.test.task.client.view.StatusIndicator;
 import com.example.test.task.client.view.SubstitutionManagementView;
 import com.example.test.task.shared.SubstitutionDetails;
+import com.example.test.task.shared.Utils;
 import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
+import com.google.gwt.view.client.ProvidesKey;
 
 public class SubstitutionManagementPresenter implements Presenter,
 		SubstitutionManagementView.Presenter<SubstitutionDetails> {
 
 	SubstitutionManagementView<SubstitutionDetails> view;
 	SubstitutionManagementServiceAsync service;
-	SubstitutionDetails[] data;
+	StatusIndicator statusIndicator;
 
 	EventBus eventBus;
 
 	public SubstitutionManagementPresenter(
 			SubstitutionManagementView<SubstitutionDetails> view,
-			SubstitutionManagementServiceAsync service, EventBus eventBus) {
+			SubstitutionManagementServiceAsync service,StatusIndicator statusIndicator, EventBus eventBus) {
 		super();
 		this.view = view;
 		this.service = service;
 		this.eventBus = eventBus;
+		this.statusIndicator=statusIndicator;
 		view.setPresenter(this);
+		initView();
 		fetchData();
-		
+
 		eventBus.addHandler(UpdateDataEvent.TYPE, new UpdateDataEventHandler() {
 			public void onUpdateDataEvent(UpdateDataEvent event) {
 				fetchData();
@@ -45,58 +55,180 @@ public class SubstitutionManagementPresenter implements Presenter,
 		container.add(view.asWidget());
 	}
 
-	public void onCreateButtonClicked() {
+	public void onCreateAction() {
 		eventBus.fireEvent(new CreateSubstitutionEvent());
 	}
 
-	public void onUpdateButtonClicked() {
-		Integer selectedItedId=view.getCheckedItemIds().get(0);
-		for(SubstitutionDetails item:data){
-			if(selectedItedId.equals(item.getId())){
-				eventBus.fireEvent(new EditSubstitutionEvent(item.getId()));
+	public void onUpdateAction() {
+		if(view.getSelectedItems().size()==1){
+			 eventBus.fireEvent(new EditSubstitutionEvent(view.getSelectedItems().iterator().next().getId()));
+		}else{
+			statusIndicator.setErrorStatus("Internal error");
+		}
+	}
+
+	@SuppressWarnings("rawtypes")
+	public void onDeleteAction() {
+		
+		Collection<SubstitutionDetails> selectedItems=view.getSelectedItems();
+		if(selectedItems.isEmpty()) return;
+		 
+		statusIndicator.setInfoStatus("Deleting...");
+		List<Integer> ids=new ArrayList<Integer>();
+		for(SubstitutionDetails item:selectedItems)
+			ids.add(item.getId());
+		
+		service.deleteSubstitution(ids,new AsyncCallback<List>() {
+			public void onFailure(Throwable caught) {
+				statusIndicator.setErrorStatus("Error during deleting "+caught.getMessage());				
+			}
+
+			@SuppressWarnings("unchecked")
+			public void onSuccess(List result) {
+				view.setData(result);
+				statusIndicator.clear();
+				view.enableDeleteControl(false);
+				view.enableUpdateControl(false);
+			}
+		}); 
+	}
+
+	@SuppressWarnings("rawtypes")
+	protected void fetchData() {
+		
+		  statusIndicator.setInfoStatus("Loading data...");
+		  service.getSubstitutions(new AsyncCallback<List>() {
+			
+			@SuppressWarnings("unchecked")
+			public void onSuccess(List result) {
+				view.setData(result);
+				statusIndicator.clear();				
+			}
+			
+			public void onFailure(Throwable caught) {
+				statusIndicator.setErrorStatus("Loading problems: "+caught.getMessage());				
+			}
+		});
+		 
+	}
+
+	public void onSelect(Collection<SubstitutionDetails> selctedItems) {
+		if (selctedItems.size() == 1) {
+			view.enableDeleteControl(true);
+			view.enableUpdateControl(true);
+		} else {
+			// more than one selected
+			if (selctedItems.size() > 0) {
+				view.enableDeleteControl(true);
+				view.enableUpdateControl(false);
+			} else {
+				// nothing selected
+				view.enableDeleteControl(false);
+				view.enableUpdateControl(false);
 			}
 		}
 	}
 
-	public void onDeleteButtonClicked() {
-		List<Integer> selectedItems=view.getCheckedItemIds();
-		if(selectedItems.isEmpty())
-			return;
+	private void initView(){
+		ProvidesKey<SubstitutionDetails> providesKey=new ProvidesKey<SubstitutionDetails>() {
+			public Integer getKey(SubstitutionDetails item) {
+				return item.getId();
+			};
+		};
 		
-		view.onLoadDataStart();
-		service.deleteSubstitution(
-				selectedItems.toArray(new Integer[] {}),
-				new AsyncCallback<SubstitutionDetails[]>() {
-					public void onFailure(Throwable caught) {
-						caught.printStackTrace();
-						view.onLoadDataError();
-					}
-
-					public void onSuccess(SubstitutionDetails[] result) {
-						view.setData(Arrays.asList(result));
-						view.onLoadDataFinish();
-					}
-				});
-	}
-
-	public void updateData() {
-		fetchData();
-	}
-
-	protected void fetchData() {
-		view.onLoadDataStart();
-		service.getSubstitutions(new AsyncCallback<SubstitutionDetails[]>() {
-
-			public void onFailure(Throwable arg0) {
-				arg0.printStackTrace();
-				view.onLoadDataError();
+		LinkedHashMap<String, Column<SubstitutionDetails, ?>> columns=new LinkedHashMap<String, Column<SubstitutionDetails, ?>>();
+		LinkedHashMap<String, Comparator<SubstitutionDetails>> comparators=new LinkedHashMap<String, Comparator<SubstitutionDetails>>();
+		
+		//name column
+		TextColumn<SubstitutionDetails> nameColumn=new TextColumn<SubstitutionDetails>() {
+			@Override
+			public String getValue(SubstitutionDetails object) {
+				return object.getName();
 			}
-
-			public void onSuccess(SubstitutionDetails[] result) {
-				data=result;
-				view.setData(Arrays.asList(result));
-				view.onLoadDataFinish();
+		};
+		nameColumn.setSortable(true);
+		
+		columns.put("Substitute", nameColumn);
+		comparators.put("Substitute", new Comparator<SubstitutionDetails>() {
+			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
+				return Utils.compare(o1.getName(), o2.getName());
 			}
 		});
+		
+		
+		//role column
+		TextColumn<SubstitutionDetails> roleColumn=new TextColumn<SubstitutionDetails>() {
+			@Override
+			public String getValue(SubstitutionDetails object) {
+				return object.getRole();
+			}
+		};
+		roleColumn.setSortable(true);
+		
+		columns.put("Role", roleColumn);
+		comparators.put("Role", new Comparator<SubstitutionDetails>() {
+			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
+				return Utils.compare(o1.getRole(), o2.getRole());
+			}
+		});
+		
+		
+
+		//ruletype column
+		TextColumn<SubstitutionDetails> ruleTypeColumn=new TextColumn<SubstitutionDetails>() {
+			@Override
+			public String getValue(SubstitutionDetails object) {
+				return object.getRuleType();
+			}
+		};
+		ruleTypeColumn.setSortable(true);
+		
+		columns.put("Rule type", ruleTypeColumn);
+		comparators.put("Rule type", new Comparator<SubstitutionDetails>() {
+			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
+				return Utils.compare(o1.getRuleType(), o2.getRuleType());
+			}
+		});
+		
+		
+		//beginDate column
+		TextColumn<SubstitutionDetails> beginDateColumn=new TextColumn<SubstitutionDetails>() {
+			@Override
+			public String getValue(SubstitutionDetails object) {
+				//FIXME: localize date formatting
+				//TODO: column should be sortable by date, so it is shouldn't be a text
+				return object.getBeginDate()!=null?object.getBeginDate().toString():"";
+			}
+		};
+		beginDateColumn.setSortable(true);
+		
+		columns.put("Begin", beginDateColumn);
+		comparators.put("Begin", new Comparator<SubstitutionDetails>() {
+			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
+				return Utils.compare(o1.getBeginDate(), o2.getBeginDate());
+			}
+		});
+		
+		
+		//beginDate column
+		TextColumn<SubstitutionDetails> endDateColumn=new TextColumn<SubstitutionDetails>() {
+			@Override
+			public String getValue(SubstitutionDetails object) {
+				//FIXME: localize date formatting
+				//TODO: column should be sortable by date, so it is shouldn't be a text
+				return object.getEndDate()!=null?object.getEndDate().toString():"";
+			}
+		};
+		endDateColumn.setSortable(true);
+		
+		columns.put("End", endDateColumn);
+		comparators.put("End", new Comparator<SubstitutionDetails>() {
+			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
+				return Utils.compare(o1.getEndDate(), o2.getEndDate());
+			}
+		});
+
+		view.init(providesKey, columns,comparators);
 	}
+	
 }

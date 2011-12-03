@@ -11,8 +11,6 @@
 	<g:VerticalPanel spacing="3" height="20">
 		<g:Label text="This people can work on behalf of you" height="20px"
 			horizontalAlignment="ALIGN_LEFT" />
-		<g:Label text="" ui:field="loadingLable" height="20px"
-			direction="LTR" />
 		<g:FlowPanel height="100px">
 			<g:PushButton text="Create" ui:field="createButton" />
 			<g:PushButton text="Update" ui:field="updateButton" enabled="false" />

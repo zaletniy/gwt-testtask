@@ -10,6 +10,11 @@
 	<g:DialogBox animationEnabled="false"
 		autoHideOnHistoryEventsEnabled="false" modal="true" ui:field="dialogBox">
 		<g:VerticalPanel>
+			<g:HorizontalPanel>
+				<g:Image url="gwt/standard/images/splitPanelThumb.png"></g:Image>
+				<g:Label text="Substitution management"></g:Label>
+				<g:PushButton width="20px" height="13px" text="X" ui:field="closeButton"></g:PushButton>
+			</g:HorizontalPanel>
 			<g:Grid>
 				<g:row>
 					<g:customCell>

@@ -46,7 +46,7 @@ public class TestTask implements EntryPoint {
 	public void onModuleLoad() {
 		SubstitutionManagementViewImpl<SubstitutionDetails> view = new SubstitutionManagementViewImpl<SubstitutionDetails>();
 		SubstitutionManagementPresenter presenter = new SubstitutionManagementPresenter(
-				view, substitutionService, eventBus);
+				view, substitutionService, statusIndicator, eventBus);
 		presenter.go(RootPanel.get("application"));
 
 		EditSubstitutionViewImpl editSubstitutionViewImpl = new EditSubstitutionViewImpl();

@@ -3,22 +3,24 @@
  */
 package com.example.test.task.client.view;
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Comparator;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map.Entry;
 import java.util.Set;
 
-import com.example.test.task.shared.SubstitutionDetails;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.ColumnSortEvent.Handler;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.ListHandler;
-import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.ui.Composite;
-import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
@@ -26,8 +28,6 @@ import com.google.gwt.view.client.ListDataProvider;
 import com.google.gwt.view.client.MultiSelectionModel;
 import com.google.gwt.view.client.ProvidesKey;
 import com.google.gwt.view.client.SelectionChangeEvent;
-import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.event.dom.client.ClickEvent;
 
 /**
  * @author Ilya Sviridov
@@ -45,18 +45,25 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	@UiField
 	PushButton deleteButton;
 	@UiField(provided = true)
-	CellTable<SubstitutionDetails> table = new CellTable<SubstitutionDetails>(KEY_PROVIDER);
-	@UiField Label loadingLable;
+	CellTable<T> table = new CellTable<T>();
 	
 	Presenter<T> presenter;
 	
-	List<Integer> selectedItems=new ArrayList<Integer>();
+	ProvidesKey<T> keyProvider;
 	
-	public static final ProvidesKey<SubstitutionDetails> KEY_PROVIDER = new ProvidesKey<SubstitutionDetails>() {
-		public Integer getKey(SubstitutionDetails item) {
-			return item.getId();
-		}
+	ListDataProvider<T> listDataProvider=new ListDataProvider<T>();
+	
+	MultiSelectionModel<T> selectionModel;
+	
+	@Deprecated
+	LinkedHashMap<String, Comparator<T>> comparators;
+	
+	MutableListHandler<T> sortHandler;
+	
+	/*
+	public static final ProvidesKey<SubstitutionDetails> KEY_PROVIDER = 
 	};
+	*/
 
 	@SuppressWarnings("rawtypes")
 	interface SubstitutionManagementViewImplUiBinder extends
@@ -70,6 +77,11 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 
 	public void setData(List<T> items) {
 		
+		listDataProvider.setList(items);
+		sortHandler.setData(listDataProvider.getList());
+		table.setRowCount(items.size());
+		
+		/*
 		ListDataProvider<SubstitutionDetails> listDataProvider=new ListDataProvider<SubstitutionDetails>((List<SubstitutionDetails>)items);
 		
 		listDataProvider.addDataDisplay(table);
@@ -176,10 +188,7 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 
 		table.setRowCount(items.size());
         table.getColumnSortList().push(nameColumn);
-	}
-
-	public List<Integer> getCheckedItemIds() {
-		return selectedItems;
+        */
 	}
 
 	public void setPresenter(SubstitutionManagementView.Presenter<T> presenter) {
@@ -192,32 +201,72 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	}
 
 
-	public void onLoadDataStart() {
-		loadingLable.setText("Loading...");
-	}
-
-
-	public void onLoadDataFinish() {
-		loadingLable.setText("");
-	}
-
-
-	public void onLoadDataError() {
-		loadingLable.setText("Loading error. Please try again later");		
-	}
-
 	@UiHandler("createButton")
 	void onCreateButtonClick(ClickEvent event) {
-		presenter.onCreateButtonClicked();
+		presenter.onCreateAction();
 	}
 	
 	@UiHandler("updateButton")
 	void onUpdateButtonClick(ClickEvent event) {
-		presenter.onUpdateButtonClicked();
+		presenter.onUpdateAction();
 	}
 	
 	@UiHandler("deleteButton")
 	void onDeleteButtonClick(ClickEvent event) {
-		presenter.onDeleteButtonClicked();
+		presenter.onDeleteAction();
 	}
+
+
+	public Collection<T> getSelectedItems() {
+		return selectionModel.getSelectedSet();
+	}
+
+
+	public void init(ProvidesKey<T> keyProvider,
+			LinkedHashMap<String, Column<T, ?>> columns,LinkedHashMap<String, Comparator<T>> comparators) {
+		//this.comparators=comparators;
+		this.keyProvider=keyProvider;
+		
+		listDataProvider.addDataDisplay(table);
+		
+		selectionModel = new MultiSelectionModel<T>(keyProvider);
+		
+		sortHandler=new MutableListHandler<T>();
+		table.addColumnSortHandler(sortHandler);
+		table.setSelectionModel(selectionModel,DefaultSelectionEventManager.<T>createCheckboxManager());
+		
+		//the first checkbox column
+		Column<T, Boolean> checkColumn = new Column<T, Boolean>(new CheckboxCell(true, false)) {
+			@Override
+			public Boolean getValue(T object) {
+				return selectionModel.isSelected(object);
+			}
+		};
+			
+		table.addColumn(checkColumn,"");
+		
+		for(Entry<String, Column<T, ?>> entry:columns.entrySet()){
+			table.addColumn(entry.getValue(),entry.getKey());
+			sortHandler.setComparator(entry.getValue(), comparators.get(entry.getKey()));
+		}
+		
+		selectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+			public void onSelectionChange(SelectionChangeEvent event) {
+				Set<T> selectedSet=selectionModel.getSelectedSet();
+				presenter.onSelect(selectedSet);
+			}
+		});		
+	}
+
+
+	public void enableUpdateControl(boolean enabled) {
+		updateButton.setEnabled(enabled);
+	}
+
+
+	public void enableDeleteControl(boolean enabled) {
+		deleteButton.setEnabled(enabled);
+	}
+
+
 }

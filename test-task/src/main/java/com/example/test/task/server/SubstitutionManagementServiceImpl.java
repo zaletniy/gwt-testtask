@@ -39,7 +39,7 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 
 	protected int idCounter = 100;
 
-	public SubstitutionDetails[] getSubstitutions() throws RemoteException {
+	public List<SubstitutionDetails> getSubstitutions() throws RemoteException {
 		try {
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
@@ -55,13 +55,13 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 			substitutionDetails.setRole(getById(source.getRoleId(), roles)
 					.getName());
 			substitutionDetails.setRuleType(source.getRuleType().getName());
-			substitutionDetails.setStartDate(source.getBeginDate());
+			substitutionDetails.setBeginDate(source.getBeginDate());
 			substitutionDetails.setEndDate(source.getEndDate());
 
 			substitutions.add(substitutionDetails);
 		}
 
-		return substitutions.toArray(new SubstitutionDetails[] {});
+		return substitutions;
 	}
 
 	public int saveSubstitution(Substitution substitution)
@@ -77,7 +77,7 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 		return data.get(id);
 	}
 
-	public SubstitutionDetails[] deleteSubstitution(Integer[] ids)
+	public List<SubstitutionDetails> deleteSubstitution(List<Integer> ids)
 			throws RemoteException {
 		for (Integer id : ids) {
 			getData().remove(id);
@@ -90,9 +90,9 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 			data = new HashMap<Integer, Substitution>();
 			Substitution substitution1 = new Substitution(1, 1, 1,
 					ruleTypes[1], new Date(), new Date());
-			Substitution substitution2 = new Substitution(2, 1, 1,
+			Substitution substitution2 = new Substitution(2, 2, 1,
 					ruleTypes[2], new Date(), new Date());
-			Substitution substitution3 = new Substitution(3, 1, 1,
+			Substitution substitution3 = new Substitution(3, 2, 1,
 					ruleTypes[2], new Date(), new Date());
 			Substitution substitution4 = new Substitution(4, 1, 1,
 					ruleTypes[0], null, null);

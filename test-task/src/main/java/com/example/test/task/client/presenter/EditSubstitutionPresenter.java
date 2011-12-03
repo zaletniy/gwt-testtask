@@ -125,7 +125,7 @@ public class EditSubstitutionPresenter implements Presenter,
 	}
 
 	public void onCancelAction() {
-		// TODO some activity or just ignore.
+		statusIndicator.clear();
 	}
 
 	public void onSaveAction() {
@@ -145,6 +145,9 @@ public class EditSubstitutionPresenter implements Presenter,
 			if (substitution.getRuleType().isInterval()) {
 				substitution.setBeginDate(view.getBeginDate());
 				substitution.setEndDate(view.getEndDate());
+			}else{
+				substitution.setBeginDate(null);
+				substitution.setEndDate(null);
 			}
 			
 			statusIndicator.setInfoStatus("Saving substitution...");
@@ -208,6 +211,7 @@ public class EditSubstitutionPresenter implements Presenter,
 		if (substitution.getRuleType().isInterval()) {
 			view.setBeginDate(substitution.getBeginDate());
 			view.setEndDate(substitution.getEndDate());
+			view.setTimeIntervalEnabled(true);
 		} else {
 			view.setEndDate(null);
 			view.setEndDate(null);
