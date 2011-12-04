@@ -14,6 +14,11 @@ import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.resources.client.DataResource;
+import com.google.gwt.resources.client.ImageResource;
+import com.google.gwt.resources.client.ClientBundle.Source;
+import com.google.gwt.resources.client.ImageResource.ImageOptions;
+import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -69,6 +74,12 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 		@Source({ CellTable.Style.DEFAULT_CSS,
 				"com/example/test/task/client/SubstitutionManagementTable.css" })
 		TableStyle cellTableStyle();
+		
+		@Source("com/example/test/task/client/table_heading_bg.gif")
+		DataResource tableHeaderBackground();
+		
+		@Source("com/example/test/task/client/cell_bg.gif")
+		DataResource firstColumnBackground();
 	}
 
 	/**
