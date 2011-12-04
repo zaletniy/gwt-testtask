@@ -1,74 +1,81 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
-	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client">
+	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client"
+	xmlns:u="urn:import:com.example.test.task.client.view">
 
 	<ui:style>
 		.important {
 			font-weight: bold;
 		}
 	</ui:style>
+	
+	<ui:with field="res" type="com.example.test.task.client.ResourceBundle" />
+	
 	<g:DialogBox animationEnabled="false"
 		autoHideOnHistoryEventsEnabled="false" modal="true" ui:field="dialogBox">
-		<g:VerticalPanel>
-			<g:HorizontalPanel>
-				<g:Image url="gwt/standard/images/splitPanelThumb.png"></g:Image>
-				<g:Label text="Substitution management"></g:Label>
-				<g:PushButton width="20px" height="13px" text="X" ui:field="closeButton"></g:PushButton>
-			</g:HorizontalPanel>
-			<g:Grid>
-				<g:row>
-					<g:customCell>
-						<g:Label text="Role:" />
-					</g:customCell>
-					<g:customCell>
-						<g:ListBox ui:field="roleLbx" />
-					</g:customCell>
-				</g:row>
-				<g:row>
-					<g:customCell>
-						<g:Label text="Substitute:" />
-					</g:customCell>
-					<g:customCell>
-						<g:ListBox ui:field="substituteLbx" />
-					</g:customCell>
-				</g:row>
-				<g:row>
-					<g:customCell>
-						<g:Label text="Rule type:" />
-					</g:customCell>
-					<g:customCell>
-						<g:ListBox ui:field="ruleTypeLbx" />
-					</g:customCell>
-				</g:row>
-				<g:row>
-					<g:customCell>
-						<g:Label text="Time interval" />
-					</g:customCell>
-				</g:row>
+		<u:WindowContainer title="Substitution management">
+			<u:windowImage>
+				<g:Image resource="{res.substitutionWindowIcon}" />
+			</u:windowImage>
+			<u:controllPanel/>
+			<u:contentPanel>
+				<g:VerticalPanel>
+					<g:Grid>
+						<g:row>
+							<g:customCell>
+								<g:Label text="Role:" />
+							</g:customCell>
+							<g:customCell>
+								<g:ListBox ui:field="roleLbx" />
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label text="Substitute:" />
+							</g:customCell>
+							<g:customCell>
+								<g:ListBox ui:field="substituteLbx" />
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label text="Rule type:" />
+							</g:customCell>
+							<g:customCell>
+								<g:ListBox ui:field="ruleTypeLbx" />
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label text="Time interval" />
+							</g:customCell>
+						</g:row>
 
-				<g:row>
-					<g:customCell>
-						<g:Label text="Begin:" />
-					</g:customCell>
-					<g:customCell>
-						<p1:DateBox ui:field="beginDbx"></p1:DateBox>
-					</g:customCell>
-				</g:row>
-				<g:row>
-					<g:customCell>
-						<g:Label text="End:" />
-					</g:customCell>
-					<g:customCell>
-						<p1:DateBox ui:field="endDbx"></p1:DateBox>
-					</g:customCell>
-				</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label text="Begin:" />
+							</g:customCell>
+							<g:customCell>
+								<p1:DateBox ui:field="beginDbx"></p1:DateBox>
+							</g:customCell>
+						</g:row>
+						<g:row>
+							<g:customCell>
+								<g:Label text="End:" />
+							</g:customCell>
+							<g:customCell>
+								<p1:DateBox ui:field="endDbx"></p1:DateBox>
+							</g:customCell>
+						</g:row>
 
-			</g:Grid>
-			<g:HorizontalPanel horizontalAlignment="ALIGN_RIGHT"
-				verticalAlignment="ALIGN_MIDDLE">
-				<g:PushButton text="Cancel" ui:field="cancelButton" />
-				<g:PushButton text="Save" ui:field="saveButton" />
-			</g:HorizontalPanel>
-		</g:VerticalPanel>
+					</g:Grid>
+					<g:HorizontalPanel horizontalAlignment="ALIGN_RIGHT"
+						verticalAlignment="ALIGN_MIDDLE">
+						<g:PushButton text="Cancel" ui:field="cancelButton" />
+						<g:PushButton text="Save" ui:field="saveButton" />
+					</g:HorizontalPanel>
+				</g:VerticalPanel>
+			</u:contentPanel>
+		</u:WindowContainer>
 	</g:DialogBox>
 </ui:UiBinder> 

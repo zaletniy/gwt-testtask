@@ -37,7 +37,6 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	@UiField
 	DialogBox dialogBox;
-	@UiField PushButton closeButton;
 
 	Presenter presenter;
 
@@ -165,9 +164,5 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	public void onDataSavingOk() {
 		dialogBox.hide();
-	}
-	@UiHandler("closeButton")
-	void onPushButtonClick(ClickEvent event) {
-		onCancelButtonClick(event);
 	}
 }
