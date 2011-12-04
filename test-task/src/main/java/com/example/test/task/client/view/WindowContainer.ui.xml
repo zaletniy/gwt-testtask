@@ -1,0 +1,19 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+	xmlns:g="urn:import:com.google.gwt.user.client.ui">
+	<ui:with field="res" type="com.example.test.task.client.ResourceBundle" />
+
+	<g:VerticalPanel>
+		<g:HorizontalPanel>
+			<g:SimplePanel ui:field="windowIconPanel" />
+			<g:Label text="Please set window title here" ui:field="titleLbl" />
+			<g:PushButton ui:field="closeBtn">
+				<g:upFace resource="{res.closeButton}"/>
+				<g:downFace resource="{res.closeButton}"/>
+			</g:PushButton>
+		</g:HorizontalPanel>
+		<g:SimplePanel ui:field="contentPanel" />
+		<g:HorizontalPanel ui:field="controlPanel"
+			horizontalAlignment="ALIGN_RIGHT" verticalAlignment="ALIGN_MIDDLE" />
+	</g:VerticalPanel>
+</ui:UiBinder> 
