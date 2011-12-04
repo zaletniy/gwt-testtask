@@ -1,26 +1,68 @@
-/* Incremental changes from CellTable.css */ 
+/* Incremental changes from CellTable.css */
+/*
 .cellTableFooter {
-  padding: 3px 9px;
+	padding: 3px 9px;
 }
-
-@url tableHeaderBackgroundUrl tableHeaderBackground;
-
-.cellTableHeader, .cellTableLastColumnHeader{
-  color: #000000;
-  font: 10px Arial,Helvetica,sans-serif;
-  border-bottom: 1px solid #D0D0D0;
-  border-right: 1px solid #D0D0D0;
-  padding: 0 7px 0 7px;
-  vertical-align: middle;
-  height: 21px;
-  
-  text-align: left;
-  text-shadow: none;
-  overflow: hidden;
-  background: tableHeaderBackgroundUrl repeat-x scroll 0 0 transparent;
-
+.cellTableHeader,.cellTableLastColumnHeader {
+	color: #000000;
+	font: 10px Arial, Helvetica, sans-serif;
+	border-bottom: 1px solid #D0D0D0;
+	border-right: 1px solid #D0D0D0;
+	padding: 0 7px 0 7px;
+	vertical-align: middle;
+	height: 21px;
+	text-align: left;
+	text-shadow: none;
+	overflow: hidden;
+	background: tableHeaderBackgroundUrl repeat-x scroll 0 0 transparent;
 }
-
-.createButton{
+.createButton {
 	background: black;
 }
+
+
+ */
+
+@url closeButtonIconUrl closeButtonIconResource;
+.closeButton {
+	background: closeButtonIconUrl repeat-x scroll 0 0 transparent;
+	width: 100px;
+	height: 100px;
+}
+
+.tabStyle{
+	
+}
+
+
+/*
+.buttonCellBaseDefault {
+	background-color: yellow;
+}
+
+.buttonCellBasePrimary {
+	
+}
+
+
+
+.buttonCellBaseNegative {
+	
+}
+
+.buttonCellBasePushing {
+	
+}
+
+.buttonCellBaseCollapseLeft {
+	
+}
+
+.buttonCellBase {
+	background-color: yellow;
+}
+
+.buttonCellBaseCollapseRight {
+	
+}
+*/

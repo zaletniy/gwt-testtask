@@ -7,31 +7,40 @@
 
 	<u:WindowContainer title="Substitution management">
 		<u:windowImage>
-			<g:Image resource="{res.substitutionWindowIcon}"/>
+			<g:Image resource="{res.substitutionWindowIcon}" />
 		</u:windowImage>
 		<u:controllPanel>
-			<g:PushButton text="OK"/>
+			<g:PushButton text="OK" />
 		</u:controllPanel>
 		<u:contentPanel>
-			<g:VerticalPanel spacing="3" height="20">
-				<g:Label text="This people can work on behalf of you"
-					height="20px" horizontalAlignment="ALIGN_LEFT" />
-				<g:FlowPanel height="100px">
-					<g:PushButton ui:field="createButton">
-						<g:upFace>
-							<div>Create</div>
-						</g:upFace>
-						<!-- <g:downFace image='{prettyImage}'/> <g:upHoveringFace><b>Click 
-							ME!</b></g:upHoveringFace> <g:downHoveringFace image='{prettyImage}'/> <g:upDisabledFace 
-							image='{prettyImage}'/> <g:downDisabledFace image='{prettyImage}'/> -->
-					</g:PushButton>
-					<g:PushButton text="Update" ui:field="updateButton"
-						enabled="false" />
-					<g:PushButton text="Delete" ui:field="deleteButton"
-						enabled="false" />
-				</g:FlowPanel>
-				<p1:CellTable ui:field="table" />
-			</g:VerticalPanel>
+			<g:TabPanel width="100%" height="200px" styleName="{res.css.tabStyle}">
+				<g:Tab>
+					<g:TabHTML>Tab title1</g:TabHTML>
+					<g:VerticalPanel spacing="3" height="40">
+						<g:Label text="This people can work on behalf of you"
+							height="20px" horizontalAlignment="ALIGN_LEFT" />
+						<g:FlowPanel>
+							<g:PushButton ui:field="createButton">
+								<g:upFace>
+									<div>Create</div>
+								</g:upFace>
+								<!-- <g:downFace image='{prettyImage}'/> <g:upHoveringFace><b>Click 
+									ME!</b></g:upHoveringFace> <g:downHoveringFace image='{prettyImage}'/> <g:upDisabledFace 
+									image='{prettyImage}'/> <g:downDisabledFace image='{prettyImage}'/> -->
+							</g:PushButton>
+							<g:PushButton text="Update" ui:field="updateButton"
+								enabled="false" />
+							<g:PushButton text="Delete" ui:field="deleteButton"
+								enabled="false" />
+						</g:FlowPanel>
+						<p1:CellTable ui:field="table" />
+					</g:VerticalPanel>
+				</g:Tab>
+				<g:Tab>
+					<g:TabHTML>Tab title2</g:TabHTML>
+					<g:Label>baker</g:Label>
+				</g:Tab>
+			</g:TabPanel>
 		</u:contentPanel>
 	</u:WindowContainer>
 </ui:UiBinder> 

@@ -7,9 +7,11 @@
 		<g:HorizontalPanel>
 			<g:SimplePanel ui:field="windowIconPanel" />
 			<g:Label text="Please set window title here" ui:field="titleLbl" />
-			<g:PushButton ui:field="closeBtn">
-				<g:upFace resource="{res.closeButton}"/>
-				<g:downFace resource="{res.closeButton}"/>
+			<g:PushButton ui:field="closeBtn" styleName="{res.css.closeButton}">
+				<g:upFace image="{res.closeButtonIcon}" />
+				<g:upHoveringFace image="{res.closeButtonIcon}" />
+				<g:downFace image="{res.closeButtonIcon}" />
+				<g:downHoveringFace image="{res.closeButtonIcon}" />
 			</g:PushButton>
 		</g:HorizontalPanel>
 		<g:SimplePanel ui:field="contentPanel" />
