@@ -6,6 +6,8 @@ import java.util.Comparator;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import com.example.test.task.client.Messages;
+import com.example.test.task.client.NonStringMessages;
 import com.example.test.task.client.SubstitutionManagementServiceAsync;
 import com.example.test.task.client.event.CreateSubstitutionEvent;
 import com.example.test.task.client.event.EditSubstitutionEvent;
@@ -15,6 +17,7 @@ import com.example.test.task.client.view.StatusIndicator;
 import com.example.test.task.client.view.SubstitutionManagementView;
 import com.example.test.task.shared.SubstitutionDetails;
 import com.example.test.task.shared.Utils;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
@@ -24,7 +27,8 @@ import com.google.gwt.view.client.ProvidesKey;
 
 public class SubstitutionManagementPresenter implements Presenter,
 		SubstitutionManagementView.Presenter<SubstitutionDetails> {
-
+	private Messages messages=GWT.create(Messages.class);
+	private NonStringMessages nonStringMessages=GWT.create(NonStringMessages.class);
 	SubstitutionManagementView<SubstitutionDetails> view;
 	SubstitutionManagementServiceAsync service;
 	StatusIndicator statusIndicator;
@@ -148,8 +152,8 @@ public class SubstitutionManagementPresenter implements Presenter,
 		};
 		nameColumn.setSortable(true);
 		
-		columns.put("Substitute", nameColumn);
-		comparators.put("Substitute", new Comparator<SubstitutionDetails>() {
+		columns.put(messages.tableColumnNameSubstitute(), nameColumn);
+		comparators.put(messages.tableColumnNameSubstitute(), new Comparator<SubstitutionDetails>() {
 			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
 				return Utils.compare(o1.getName(), o2.getName());
 			}
@@ -160,13 +164,14 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> roleColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
+				//messages.
 				return object.getRole();
 			}
 		};
 		roleColumn.setSortable(true);
 		
-		columns.put("Role", roleColumn);
-		comparators.put("Role", new Comparator<SubstitutionDetails>() {
+		columns.put(messages.tableColumnNameRole(), roleColumn);
+		comparators.put(messages.tableColumnNameRole(), new Comparator<SubstitutionDetails>() {
 			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
 				return Utils.compare(o1.getRole(), o2.getRole());
 			}
@@ -183,8 +188,8 @@ public class SubstitutionManagementPresenter implements Presenter,
 		};
 		ruleTypeColumn.setSortable(true);
 		
-		columns.put("Rule type", ruleTypeColumn);
-		comparators.put("Rule type", new Comparator<SubstitutionDetails>() {
+		columns.put(messages.tableColumnNameRuleType(), ruleTypeColumn);
+		comparators.put(messages.tableColumnNameRuleType(), new Comparator<SubstitutionDetails>() {
 			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
 				return Utils.compare(o1.getRuleType(), o2.getRuleType());
 			}
@@ -195,15 +200,13 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> beginDateColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				//FIXME: localize date formatting
-				//TODO: column should be sortable by date, so it is shouldn't be a text
-				return object.getBeginDate()!=null?object.getBeginDate().toString():"";
+				return object.getEndDate()!=null?nonStringMessages.dateFormat(object.getBeginDate()):"";
 			}
 		};
 		beginDateColumn.setSortable(true);
 		
-		columns.put("Begin", beginDateColumn);
-		comparators.put("Begin", new Comparator<SubstitutionDetails>() {
+		columns.put(messages.tableColumnNameBegin(), beginDateColumn);
+		comparators.put(messages.tableColumnNameBegin(), new Comparator<SubstitutionDetails>() {
 			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
 				return Utils.compare(o1.getBeginDate(), o2.getBeginDate());
 			}
@@ -214,15 +217,13 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> endDateColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				//FIXME: localize date formatting
-				//TODO: column should be sortable by date, so it is shouldn't be a text
-				return object.getEndDate()!=null?object.getEndDate().toString():"";
+				return object.getEndDate()!=null?nonStringMessages.dateFormat(object.getEndDate()):"";
 			}
 		};
 		endDateColumn.setSortable(true);
 		
-		columns.put("End", endDateColumn);
-		comparators.put("End", new Comparator<SubstitutionDetails>() {
+		columns.put(messages.tableColumnNameEnd(), endDateColumn);
+		comparators.put(messages.tableColumnNameEnd(), new Comparator<SubstitutionDetails>() {
 			public int compare(SubstitutionDetails o1, SubstitutionDetails o2) {
 				return Utils.compare(o1.getEndDate(), o2.getEndDate());
 			}

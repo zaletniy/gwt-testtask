@@ -3,6 +3,9 @@ package com.example.test.task.client.view;
 import java.util.Iterator;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiChild;
 import com.google.gwt.uibinder.client.UiField;
@@ -15,22 +18,22 @@ import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 
-public class WindowContainer extends Composite implements HasWidgets{
+public class WindowContainer extends Composite implements HasWidgets,HasClickHandlers{
 
 	private static WindowContainerUiBinder uiBinder = GWT
 			.create(WindowContainerUiBinder.class);
 	@UiField
 	PushButton closeBtn;
-	
+
 	@UiField
 	Label titleLbl;
 
 	@UiField
 	HorizontalPanel controlPanel;
-	
+
 	@UiField
 	SimplePanel contentPanel;
-	
+
 	@UiField
 	SimplePanel windowIconPanel;
 
@@ -56,23 +59,27 @@ public class WindowContainer extends Composite implements HasWidgets{
 	public boolean remove(Widget w) {
 		return contentPanel.remove(w);
 	}
-	
+
 	@UiChild(limit = 1, tagname = "controllPanel")
-	public void addControl(Widget widget){
+	public void addControl(Widget widget) {
 		controlPanel.add(widget);
 	}
-	
+
 	@UiChild(limit = 1, tagname = "contentPanel")
-	public void setContentPanel(Widget widget){
+	public void setContentPanel(Widget widget) {
 		contentPanel.add(widget);
 	}
-	
+
 	@UiChild(limit = 1, tagname = "windowImage")
-	public void setWindowImage(Image image){
+	public void setWindowImage(Image image) {
 		windowIconPanel.add(image);
 	}
-	
-	public void setTitle(String title){
+
+	public void setTitle(String title) {
 		titleLbl.setText(title);
+	}
+
+	public HandlerRegistration addClickHandler(ClickHandler handler) {
+		return closeBtn.addClickHandler(handler);
 	}
 }

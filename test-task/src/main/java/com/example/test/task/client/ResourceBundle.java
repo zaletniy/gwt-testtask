@@ -9,12 +9,15 @@ import com.google.gwt.resources.client.ImageResource;
 public interface ResourceBundle extends ClientBundle {
     public static final ResourceBundle INSTANCE = GWT.create(ResourceBundle.class);
     
-    
 	@Source("ApplicationStyle.css")
-	public Style css();
-	
+    @CssResource.NotStrict
+    public Style css();
+		
 	@Source("create.gif")
 	public ImageResource createIcon();
+	
+	@Source("create.gif")
+	public DataResource createIconResource();
 	
 	@Source("wind_icon.gif")
 	public ImageResource substitutionWindowIcon();
@@ -26,8 +29,6 @@ public interface ResourceBundle extends ClientBundle {
 	public DataResource closeButtonIconResource();
 	
 	public interface Style extends CssResource {
-	    String closeButton();
 	    String tabStyle();
     }
-
 }

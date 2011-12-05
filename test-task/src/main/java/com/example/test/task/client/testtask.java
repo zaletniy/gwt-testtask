@@ -17,6 +17,9 @@ import com.google.gwt.user.client.ui.RootPanel;
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class TestTask implements EntryPoint {
+	static{
+		ResourceBundle.INSTANCE.css().ensureInjected();
+	}
 	/**
 	 * The message displayed to the user when the server cannot be reached or
 	 * returns an error.

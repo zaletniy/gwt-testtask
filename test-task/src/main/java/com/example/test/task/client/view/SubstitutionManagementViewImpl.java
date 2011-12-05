@@ -10,22 +10,20 @@ import java.util.List;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import com.google.gwt.cell.client.Cell;
+import com.example.test.task.client.Messages;
 import com.google.gwt.cell.client.CheckboxCell;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.resources.client.DataResource;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.resources.client.ClientBundle.Source;
-import com.google.gwt.resources.client.ImageResource.ImageOptions;
-import com.google.gwt.resources.client.ImageResource.RepeatStyle;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.PushButton;
+import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.gwt.view.client.DefaultSelectionEventManager;
 import com.google.gwt.view.client.ListDataProvider;
@@ -42,14 +40,24 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 
 	private static SubstitutionManagementViewImplUiBinder uiBinder = GWT
 			.create(SubstitutionManagementViewImplUiBinder.class);
+	private static Messages messages=GWT.create(Messages.class);
 	@UiField
 	PushButton createButton;
 	@UiField
 	PushButton updateButton;
 	@UiField
 	PushButton deleteButton;
+	
+	@UiField
+	PushButton okButton;
+	
 	@UiField(provided = true)
 	CellTable<T> table=new CellTable<T>(10,TableResources.INSTANCE);
+	
+	@UiField
+	TabPanel tabPanel;
+	
+	@UiField WindowContainer windowContainer;
 
 	Presenter<T> presenter;
 
@@ -90,6 +98,7 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 
 	public SubstitutionManagementViewImpl() {
 		initWidget(uiBinder.createAndBindUi(this));
+		tabPanel.selectTab(0);
 	}
 
 	public void setData(List<T> items) {
@@ -173,6 +182,16 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 
 	public void enableDeleteControl(boolean enabled) {
 		deleteButton.setEnabled(enabled);
+	}
+	
+	@UiHandler("windowContainer")
+	void onWindowContainerClick(ClickEvent event) {
+		Window.alert(messages.notDefined());
+	}
+	
+	@UiHandler("okButton")
+	void onOkClick(ClickEvent event) {
+		Window.alert(messages.notDefined());
 	}
 
 }

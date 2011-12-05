@@ -1,21 +1,15 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui">
-	<ui:with field="res" type="com.example.test.task.client.ResourceBundle" />
-
-	<g:VerticalPanel>
-		<g:HorizontalPanel>
+	<g:VerticalPanel stylePrimaryName="windowPanel">
+		<g:HorizontalPanel stylePrimaryName="windowHeaderPanel">
 			<g:SimplePanel ui:field="windowIconPanel" />
 			<g:Label text="Please set window title here" ui:field="titleLbl" />
-			<g:PushButton ui:field="closeBtn" styleName="{res.css.closeButton}">
-				<g:upFace image="{res.closeButtonIcon}" />
-				<g:upHoveringFace image="{res.closeButtonIcon}" />
-				<g:downFace image="{res.closeButtonIcon}" />
-				<g:downHoveringFace image="{res.closeButtonIcon}" />
+			<g:PushButton ui:field="closeBtn" stylePrimaryName="windowCloseButton">
 			</g:PushButton>
 		</g:HorizontalPanel>
-		<g:SimplePanel ui:field="contentPanel" />
+		<g:SimplePanel ui:field="contentPanel" stylePrimaryName="windowContentPanel" />
 		<g:HorizontalPanel ui:field="controlPanel"
-			horizontalAlignment="ALIGN_RIGHT" verticalAlignment="ALIGN_MIDDLE" />
+			horizontalAlignment="ALIGN_RIGHT" verticalAlignment="ALIGN_MIDDLE" stylePrimaryName="windowControlPanel" />
 	</g:VerticalPanel>
 </ui:UiBinder> 

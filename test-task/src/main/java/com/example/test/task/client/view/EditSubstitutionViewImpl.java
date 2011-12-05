@@ -37,6 +37,7 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	@UiField
 	DialogBox dialogBox;
+	@UiField WindowContainer windowContainer;
 
 	Presenter presenter;
 
@@ -164,5 +165,10 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	public void onDataSavingOk() {
 		dialogBox.hide();
+	}
+	
+	@UiHandler("windowContainer")
+	void onWindowContainerClick(ClickEvent event) {
+		onCancelButtonClick(event);
 	}
 }

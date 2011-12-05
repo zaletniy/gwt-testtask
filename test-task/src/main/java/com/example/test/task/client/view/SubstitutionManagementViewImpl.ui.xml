@@ -4,41 +4,53 @@
 	xmlns:p1="urn:import:com.google.gwt.user.cellview.client" xmlns:u="urn:import:com.example.test.task.client.view">
 
 	<ui:with field="res" type="com.example.test.task.client.ResourceBundle" />
-
-	<u:WindowContainer title="Substitution management">
+	<ui:with field="messages" type="com.example.test.task.client.Messages"/>
+	
+	<u:WindowContainer title="{messages.substitutionManagementWindowTitle}" ui:field="windowContainer">
 		<u:windowImage>
 			<g:Image resource="{res.substitutionWindowIcon}" />
 		</u:windowImage>
 		<u:controllPanel>
-			<g:PushButton text="OK" />
+			<g:PushButton text="{messages.okButtonText}" stylePrimaryName="simpleButton" ui:field="okButton"/>
 		</u:controllPanel>
 		<u:contentPanel>
-			<g:TabPanel width="100%" height="200px" styleName="{res.css.tabStyle}">
+			<g:TabPanel stylePrimaryName="tabPanel" ui:field="tabPanel">
 				<g:Tab>
-					<g:TabHTML>Tab title1</g:TabHTML>
-					<g:VerticalPanel spacing="3" height="40">
-						<g:Label text="This people can work on behalf of you"
-							height="20px" horizontalAlignment="ALIGN_LEFT" />
-						<g:FlowPanel>
-							<g:PushButton ui:field="createButton">
-								<g:upFace>
-									<div>Create</div>
-								</g:upFace>
-								<!-- <g:downFace image='{prettyImage}'/> <g:upHoveringFace><b>Click 
-									ME!</b></g:upHoveringFace> <g:downHoveringFace image='{prettyImage}'/> <g:upDisabledFace 
-									image='{prettyImage}'/> <g:downDisabledFace image='{prettyImage}'/> -->
+					<g:TabHTML><ui:text from="{messages.myDelegationRulesTabTitle}"/></g:TabHTML>
+					<g:VerticalPanel>
+						<g:Label text="{messages.substitutionManagementLabel}"/>
+						<g:HorizontalPanel>
+							<g:PushButton ui:field="createButton" stylePrimaryName="createButton">
+								<g:upFace><ui:text from="{messages.createButtonText}"/></g:upFace>
+								<g:downFace><ui:text from="{messages.createButtonText}"/></g:downFace>
+								<g:upHoveringFace><ui:text from="{messages.createButtonText}"/></g:upHoveringFace> 
+								<g:downHoveringFace><ui:text from="{messages.createButtonText}"/></g:downHoveringFace> 
+								<g:upDisabledFace><ui:text from="{messages.createButtonText}"/></g:upDisabledFace> 
+								<g:downDisabledFace><ui:text from="{messages.createButtonText}"/></g:downDisabledFace>
 							</g:PushButton>
-							<g:PushButton text="Update" ui:field="updateButton"
-								enabled="false" />
-							<g:PushButton text="Delete" ui:field="deleteButton"
-								enabled="false" />
-						</g:FlowPanel>
+							<g:PushButton ui:field="updateButton" enabled="false" styleName="updateButton">
+								<g:upFace><ui:text from="{messages.updateButtonText}"/></g:upFace>
+								<g:downFace><ui:text from="{messages.updateButtonText}"/></g:downFace>
+								<g:upHoveringFace><ui:text from="{messages.updateButtonText}"/></g:upHoveringFace> 
+								<g:downHoveringFace><ui:text from="{messages.updateButtonText}"/></g:downHoveringFace> 
+								<g:upDisabledFace><ui:text from="{messages.updateButtonText}"/></g:upDisabledFace> 
+								<g:downDisabledFace><ui:text from="{messages.updateButtonText}"/></g:downDisabledFace>
+							</g:PushButton>
+							<g:PushButton ui:field="deleteButton" enabled="false">
+								<g:upFace><ui:text from="{messages.deleteButtonText}"/></g:upFace>
+								<g:downFace><ui:text from="{messages.deleteButtonText}"/></g:downFace>
+								<g:upHoveringFace><ui:text from="{messages.deleteButtonText}"/></g:upHoveringFace> 
+								<g:downHoveringFace><ui:text from="{messages.deleteButtonText}"/></g:downHoveringFace> 
+								<g:upDisabledFace><ui:text from="{messages.deleteButtonText}"/></g:upDisabledFace> 
+								<g:downDisabledFace><ui:text from="{messages.deleteButtonText}"/></g:downDisabledFace>
+							</g:PushButton>
+						</g:HorizontalPanel>
 						<p1:CellTable ui:field="table" />
 					</g:VerticalPanel>
 				</g:Tab>
 				<g:Tab>
-					<g:TabHTML>Tab title2</g:TabHTML>
-					<g:Label>baker</g:Label>
+					<g:TabHTML><ui:text from="{messages.meAsDelegateTabTitle}"/></g:TabHTML>
+					<g:Label text="{messages.notDefined}"/>
 				</g:Tab>
 			</g:TabPanel>
 		</u:contentPanel>

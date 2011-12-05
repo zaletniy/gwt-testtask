@@ -12,8 +12,8 @@
 	<ui:with field="res" type="com.example.test.task.client.ResourceBundle" />
 	
 	<g:DialogBox animationEnabled="false"
-		autoHideOnHistoryEventsEnabled="false" modal="true" ui:field="dialogBox">
-		<u:WindowContainer title="Substitution management">
+		autoHideOnHistoryEventsEnabled="false" modal="true" ui:field="dialogBox" stylePrimaryName="dialogBox">
+		<u:WindowContainer title="Substitution management" ui:field="windowContainer">
 			<u:windowImage>
 				<g:Image resource="{res.substitutionWindowIcon}" />
 			</u:windowImage>
