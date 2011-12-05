@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import com.example.test.task.client.Messages;
+import com.example.test.task.client.NonStringMessages;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
@@ -15,11 +17,19 @@ import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.datepicker.client.DateBox;
+import com.google.gwt.user.datepicker.client.DateBox.Format;
+import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	private static EditSubstitutionViewImplUiBinder uiBinder = GWT
 			.create(EditSubstitutionViewImplUiBinder.class);
+	private NonStringMessages nonStringMessages = GWT
+			.create(NonStringMessages.class);
+	
+	private Messages messages = GWT
+			.create(Messages.class);
+	
 	@UiField
 	PushButton cancelButton;
 	@UiField
@@ -52,6 +62,8 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 				presenter.onRuleTypesSelection();
 			}
 		});
+		beginDbx.setFormat(new DateBoxFormat());
+		endDbx.setFormat(new DateBoxFormat());
 	}
 
 	public void setPresenter(Presenter presenter) {
@@ -170,5 +182,19 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 	@UiHandler("windowContainer")
 	void onWindowContainerClick(ClickEvent event) {
 		onCancelButtonClick(event);
+	}
+	
+	public class DateBoxFormat implements Format{
+		public void reset(DateBox dateBox, boolean abandon) {
+			
+		}
+		
+		public Date parse(DateBox dateBox, String text, boolean reportError) {
+			return (text==null|"".equals(text))?null:DateTimeFormat.getFormat(messages.dateBoxDateFormat()).parse(text);
+		}
+		
+		public String format(DateBox dateBox, Date date) {
+			return date==null?"":nonStringMessages.dateFormat(date);
+		}
 	}
 }

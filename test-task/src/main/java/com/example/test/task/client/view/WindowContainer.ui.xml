@@ -9,7 +9,6 @@
 			</g:PushButton>
 		</g:HorizontalPanel>
 		<g:SimplePanel ui:field="contentPanel" stylePrimaryName="windowContentPanel" />
-		<g:HorizontalPanel ui:field="controlPanel"
-			horizontalAlignment="ALIGN_RIGHT" verticalAlignment="ALIGN_MIDDLE" stylePrimaryName="windowControlPanel" />
+		<g:HorizontalPanel ui:field="controlPanel" stylePrimaryName="windowControlPanel" />
 	</g:VerticalPanel>
 </ui:UiBinder> 
