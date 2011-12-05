@@ -46,7 +46,7 @@
 							</g:PushButton>
 						</g:HorizontalPanel>
 						<g:ScrollPanel>
-							<p1:CellTable ui:field="table" />
+							<p1:CellTable ui:field="table" width="100%" />
 						</g:ScrollPanel>
 					</g:VerticalPanel>
 				</g:Tab>
