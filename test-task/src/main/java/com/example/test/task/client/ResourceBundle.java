@@ -31,6 +31,31 @@ public interface ResourceBundle extends ClientBundle {
 	@Source("close_btn.gif")
 	public DataResource closeButtonIconResource();
 	
+	@Source("top_left_corner.png")
+	public DataResource topLeftCorner();
+	
+	@Source("top_right_corner.png")
+	public DataResource topRightCorner();
+	
+	@Source("bottom_left_corner.png")
+	public DataResource bottomLeftCorner();
+	
+	@Source("bottom_right_corner.png")
+	public DataResource bottomRightCorner();
+	
+	@Source("top_repeat_center.png")
+	public DataResource topCenterBackground();
+	
+	@Source("left_middle_cen.png")
+	public DataResource middleLeftBackground();
+	
+	@Source("bottom_repeat_center.png")
+	public DataResource bottomCenterBackground();
+	
+	@Source("right_middle_cen.png")
+	public DataResource middleRightBackground();
+	
+	
 	public interface Style extends CssResource {
 	    String tabStyle();
     }

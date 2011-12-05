@@ -1,21 +1,83 @@
-/* Incremental changes from CellTable.css */
+@url topLeftCornerUrl topLeftCorner;
+.windowDecoratorPanel .topLeft {
+	background: topLeftCornerUrl no-repeat;
+	height: 8px;
+	width: 8px;
+}
+
+@url topRightCornerUrl topRightCorner;
+.windowDecoratorPanel .topRight {
+	background: topRightCornerUrl no-repeat;
+	height: 8px;
+	width: 8px;
+}
+
+@url bottomLeftCornerUrl bottomLeftCorner;
+.windowDecoratorPanel .bottomLeft {
+	background: bottomLeftCornerUrl no-repeat;
+	height: 8px;
+	width: 8px;
+}
+
+@url bottomRightCornerUrl bottomRightCorner;
+.windowDecoratorPanel .bottomRight {
+	background: bottomRightCornerUrl no-repeat;
+	height: 8px;
+	width: 8px;
+}
+
+@url topCenterBackgroundUrl topCenterBackground;
+.windowDecoratorPanel .topCenter {
+	background: topCenterBackgroundUrl repeat-x;
+	height: 8px;
+}
+
+@url middleLeftBackgroundtUrl middleLeftBackground;
+.windowDecoratorPanel .middleLeft {
+	background: middleLeftBackgroundtUrl repeat-y;
+	width: 8px;
+}
+
+@url bottomCenterBackgroundUrl bottomCenterBackground;
+.windowDecoratorPanel .bottomCenter {
+	background: bottomCenterBackgroundUrl repeat-x;
+	height: 8px;
+}
+
+@url middleRightBackgroundUrl middleRightBackground;
+.windowDecoratorPanel .middleRight {
+	background: middleRightBackgroundUrl repeat-y;
+	width: 8px;
+}
+
 .windowPanel {
-	border-width: 2px;
-	border-color: yellow;
-	border-style: solid;
+	
 }
 
 .windowHeaderPanel {
-	border-width: 2px;
-	border-color: fuchsia;
-	border-style: solid;
+	background-color: #D0DAE8;
 	width: 100%;
 }
 
+.windowHeaderPanel td:first-child {
+	width: 16px;
+}
+
+.windowHeaderPanel td:last-child {
+	width: 15px;
+}
+
+.windowTitleLable {
+	float: left;
+	font-size: 12px;
+	font-weight:bold;
+	line-height: 16px;
+	padding: 0 0 0 5px;
+	color: #15429B;
+}
+
 .windowContentPanel {
-	border-width: 2px;
-	border-color: navy;
-	border-style: solid;
+	border: 3px solid #99BBE8
 }
 
 .windowControlPanel {
@@ -25,16 +87,15 @@
 	width: 100%;
 }
 
-.simpleButton{
-	with:40px;
+.simpleButton {
+	with: 40px;
 }
-
 
 @url closeButtonIconUrl closeButtonIconResource;
 @url createIconResourceUrl createIconResource;
 .windowCloseButton {
-	width: 16px;
-	height: 16px;
+	width: 15px;
+	height: 15px;
 	background-image: closeButtonIconUrl;
 }
 
