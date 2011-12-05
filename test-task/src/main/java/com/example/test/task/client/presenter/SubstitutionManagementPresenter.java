@@ -67,7 +67,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		if(view.getSelectedItems().size()==1){
 			 eventBus.fireEvent(new EditSubstitutionEvent(view.getSelectedItems().iterator().next().getId()));
 		}else{
-			statusIndicator.setErrorStatus("Internal error");
+			statusIndicator.setErrorStatus(messages.statusInternalError());
 		}
 	}
 
@@ -77,14 +77,14 @@ public class SubstitutionManagementPresenter implements Presenter,
 		Collection<SubstitutionDetails> selectedItems=view.getSelectedItems();
 		if(selectedItems.isEmpty()) return;
 		 
-		statusIndicator.setInfoStatus("Deleting...");
+		statusIndicator.setInfoStatus(messages.statusDeleting());
 		List<Integer> ids=new ArrayList<Integer>();
 		for(SubstitutionDetails item:selectedItems)
 			ids.add(item.getId());
 		
 		service.deleteSubstitution(ids,new AsyncCallback<List>() {
 			public void onFailure(Throwable caught) {
-				statusIndicator.setErrorStatus("Error during deleting "+caught.getMessage());				
+				statusIndicator.setErrorStatus(messages.statusErrorDuringDeleting(caught.getMessage()));				
 			}
 
 			@SuppressWarnings("unchecked")
@@ -100,7 +100,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 	@SuppressWarnings("rawtypes")
 	protected void fetchData() {
 		
-		  statusIndicator.setInfoStatus("Loading data...");
+		  statusIndicator.setInfoStatus(messages.statusLoadingData());
 		  service.getSubstitutions(new AsyncCallback<List>() {
 			
 			@SuppressWarnings("unchecked")
@@ -110,7 +110,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 			}
 			
 			public void onFailure(Throwable caught) {
-				statusIndicator.setErrorStatus("Loading problems: "+caught.getMessage());				
+				statusIndicator.setErrorStatus(messages.statusLoadingProblems(caught.getMessage()));				
 			}
 		});
 		 
@@ -164,8 +164,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> roleColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				//messages.
-				return object.getRole();
+				return nonStringMessages.roles(object.getRole());
 			}
 		};
 		roleColumn.setSortable(true);
@@ -183,7 +182,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> ruleTypeColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				return object.getRuleType();
+				return nonStringMessages.rules(object.getRuleType());
 			}
 		};
 		ruleTypeColumn.setSortable(true);

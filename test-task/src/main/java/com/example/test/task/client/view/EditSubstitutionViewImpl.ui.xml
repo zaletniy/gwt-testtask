@@ -2,20 +2,14 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
 	xmlns:g="urn:import:com.google.gwt.user.client.ui" xmlns:p1="urn:import:com.google.gwt.user.datepicker.client"
 	xmlns:u="urn:import:com.example.test.task.client.view">
-
-	<ui:style>
-		.important {
-			font-weight: bold;
-		}
-	</ui:style>
-	
 	<ui:with field="res" type="com.example.test.task.client.ResourceBundle" />
+	<ui:with field="messages" type="com.example.test.task.client.Messages"/>
 	
 	<g:DialogBox animationEnabled="false"
 		autoHideOnHistoryEventsEnabled="false" modal="true" ui:field="dialogBox" stylePrimaryName="dialogBox">
-		<u:WindowContainer title="Substitution management" ui:field="windowContainer">
+		<u:WindowContainer title="{messages.substitutionManagementWindowTitle}" ui:field="windowContainer">
 			<u:windowImage>
-				<g:Image resource="{res.substitutionWindowIcon}" />
+				<g:Image resource="{res.substitutionEditWindowIcon}" />
 			</u:windowImage>
 			<u:controllPanel/>
 			<u:contentPanel>
@@ -23,7 +17,7 @@
 					<g:Grid>
 						<g:row>
 							<g:customCell>
-								<g:Label text="Role:" />
+								<g:Label text="{messages.roleLabel}" />
 							</g:customCell>
 							<g:customCell>
 								<g:ListBox ui:field="roleLbx" />
@@ -31,7 +25,7 @@
 						</g:row>
 						<g:row>
 							<g:customCell>
-								<g:Label text="Substitute:" />
+								<g:Label text="{messages.substituteLabel}" />
 							</g:customCell>
 							<g:customCell>
 								<g:ListBox ui:field="substituteLbx" />
@@ -39,7 +33,7 @@
 						</g:row>
 						<g:row>
 							<g:customCell>
-								<g:Label text="Rule type:" />
+								<g:Label text="{messages.ruleTypeLabel}" />
 							</g:customCell>
 							<g:customCell>
 								<g:ListBox ui:field="ruleTypeLbx" />
@@ -47,13 +41,13 @@
 						</g:row>
 						<g:row>
 							<g:customCell>
-								<g:Label text="Time interval" />
+								<g:Label text="{messages.timeIntervalLabel}" />
 							</g:customCell>
 						</g:row>
 
 						<g:row>
 							<g:customCell>
-								<g:Label text="Begin:" />
+								<g:Label text="{messages.beginLabel}" />
 							</g:customCell>
 							<g:customCell>
 								<p1:DateBox ui:field="beginDbx"></p1:DateBox>
@@ -61,7 +55,7 @@
 						</g:row>
 						<g:row>
 							<g:customCell>
-								<g:Label text="End:" />
+								<g:Label text="{messages.endLabel}" />
 							</g:customCell>
 							<g:customCell>
 								<p1:DateBox ui:field="endDbx"></p1:DateBox>
@@ -71,8 +65,8 @@
 					</g:Grid>
 					<g:HorizontalPanel horizontalAlignment="ALIGN_RIGHT"
 						verticalAlignment="ALIGN_MIDDLE">
-						<g:PushButton text="Cancel" ui:field="cancelButton" />
-						<g:PushButton text="Save" ui:field="saveButton" />
+						<g:PushButton text="{messages.cancelButton}" ui:field="cancelButton" />
+						<g:PushButton text="{messages.saveButton}" ui:field="saveButton" />
 					</g:HorizontalPanel>
 				</g:VerticalPanel>
 			</u:contentPanel>

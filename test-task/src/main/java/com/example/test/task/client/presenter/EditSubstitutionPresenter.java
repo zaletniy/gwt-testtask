@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import com.example.test.task.client.Messages;
+import com.example.test.task.client.NonStringMessages;
 import com.example.test.task.client.SubstitutionManagementServiceAsync;
 import com.example.test.task.client.event.CreateSubstitutionEvent;
 import com.example.test.task.client.event.CreateSubstitutionEventHandler;
@@ -17,13 +19,18 @@ import com.example.test.task.shared.EditViewReferenceData;
 import com.example.test.task.shared.NamedData;
 import com.example.test.task.shared.RuleType;
 import com.example.test.task.shared.Substitution;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 
 public class EditSubstitutionPresenter implements Presenter,
 		com.example.test.task.client.view.EditSubstitutionView.Presenter {
-
+	
+	private NonStringMessages nonStringMessages = GWT
+			.create(NonStringMessages.class);
+	private Messages messages=GWT.create(Messages.class);
+	
 	EventBus eventBus;
 	final EditSubstitutionView view;
 	SubstitutionManagementServiceAsync service;
@@ -64,7 +71,7 @@ public class EditSubstitutionPresenter implements Presenter,
 	}
 
 	protected void init() {
-		statusIndicator.setInfoStatus("Loading data...");
+		statusIndicator.setInfoStatus(messages.statusLoadingData());
 		service.getAllNamedData(new AsyncCallback<EditViewReferenceData>() {
 			public void onSuccess(EditViewReferenceData result) {
 				roles = new HashMap<String, NamedData>();
@@ -80,19 +87,32 @@ public class EditSubstitutionPresenter implements Presenter,
 					substitutors.put(Integer.toString(substitutor.getId()),
 							substitutor);
 
-				view.setRoles(namedDataToMap(result.getRoles(), " - Select role -"));
+				view.setRoles(namedDataToMap(result.getRoles(),
+						new Localizer() {
+							public String localize(String key) {
+								return nonStringMessages.roles(key);
+							}
+						},messages.pleaseSelectRole()));
+
 				view.setRuleTypes(namedDataToMap(result.getRuleTypes(),
-						" - Select rule -"));
+						new Localizer() {
+							public String localize(String key) {
+								return nonStringMessages.rules(key);
+							}
+						},messages.pleaseSelectRuleType()));
 				view.setSubstitors(namedDataToMap(result.getSubstitutors(),
-						" - Select substitutor -"));
+						new Localizer() {
+							public String localize(String key) {
+								return key;
+							}
+						}, messages.pleaseSelectSubstitutor()));
 				view.setTimeIntervalEnabled(false);
-				
+
 				statusIndicator.clear();
 			}
 
 			public void onFailure(Throwable caught) {
-				statusIndicator.setWarnStatus("Error :"
-						+ caught.getLocalizedMessage());
+				statusIndicator.setWarnStatus(messages.statusLoadingProblems(caught.getMessage()));
 			}
 		});
 	}
@@ -102,12 +122,11 @@ public class EditSubstitutionPresenter implements Presenter,
 			init();
 
 		if (substitutionId != null) {
-			statusIndicator.setInfoStatus("Loading data...");
+			statusIndicator.setInfoStatus(messages.statusLoadingData());
 			service.getSubstitution(substitutionId,
 					new AsyncCallback<Substitution>() {
 						public void onFailure(Throwable caught) {
-							statusIndicator.setErrorStatus("Some error"
-									+ caught.getLocalizedMessage());
+							statusIndicator.setErrorStatus(messages.statusLoadingProblems(caught.getMessage()));
 						}
 
 						public void onSuccess(Substitution result) {
@@ -136,25 +155,27 @@ public class EditSubstitutionPresenter implements Presenter,
 			view.setSaveControllEnabled(true);
 			view.setCancelControllEnabled(true);
 		} else {
-			if(this.substitution==null){
-				this.substitution=new Substitution();
+			if (this.substitution == null) {
+				this.substitution = new Substitution();
 			}
-			substitution.setSubstitutionNameId(substitutors.get(view.getSubstituror()).getId());
+			substitution.setSubstitutionNameId(substitutors.get(
+					view.getSubstituror()).getId());
 			substitution.setRoleId(roles.get(view.getRole()).getId());
 			substitution.setRuleType(ruleTypes.get(view.getRuleType()));
 			if (substitution.getRuleType().isInterval()) {
 				substitution.setBeginDate(view.getBeginDate());
 				substitution.setEndDate(view.getEndDate());
-			}else{
+			} else {
 				substitution.setBeginDate(null);
 				substitution.setEndDate(null);
 			}
-			
-			statusIndicator.setInfoStatus("Saving substitution...");
+
+			statusIndicator.setInfoStatus(messages.statusSavingSubstitution());
 			service.saveSubstitution(substitution,
 					new AsyncCallback<Integer>() {
 						public void onFailure(Throwable caught) {
-							statusIndicator.setErrorStatus("Saving substitution error: "+caught.getLocalizedMessage());
+							statusIndicator
+									.setErrorStatus(messages.statusSavingSubstitutionError(caught.getMessage()));
 							view.setSaveControllEnabled(true);
 							view.setCancelControllEnabled(true);
 						}
@@ -171,17 +192,17 @@ public class EditSubstitutionPresenter implements Presenter,
 
 	public void onEndDataSet() {
 		statusIndicator.clear();
-		if(view.getBeginDate()==null){
-			statusIndicator.setWarnStatus("Begin data is not set");
+		if (view.getBeginDate() == null) {
+			statusIndicator.setWarnStatus(messages.validationBeginDataIsNotSet());
 			return;
 		}
-		if(view.getEndDate()==null){
-			statusIndicator.setWarnStatus("End data is not set");
+		if (view.getEndDate() == null) {
+			statusIndicator.setWarnStatus(messages.validationEndDataIsNotSet());
 			return;
 		}
-		
-		if(view.getEndDate().before(view.getBeginDate())){
-			statusIndicator.setWarnStatus("End can't be before begin data");
+
+		if (view.getEndDate().before(view.getBeginDate())) {
+			statusIndicator.setWarnStatus(messages.validationEndCantBeBeforeBeginData());
 			return;
 		}
 	}
@@ -222,16 +243,22 @@ public class EditSubstitutionPresenter implements Presenter,
 	}
 
 	private Map<String, String> namedDataToMap(
-			Collection<? extends NamedData> datas, String emptyItemName) {
+			Collection<? extends NamedData> datas, Localizer localizer,
+			String emptyItemName) {
 		Map<String, String> hashMap = new LinkedHashMap<String, String>();
 		if (emptyItemName != null) {
 			hashMap.put(emptyItemName, "");
 		}
 		for (NamedData data : datas) {
-			hashMap.put(data.getName(), Integer.toString(data.getId()));
+			hashMap.put(localizer.localize(data.getName()),
+					Integer.toString(data.getId()));
 		}
 
 		return hashMap;
+	}
+
+	interface Localizer {
+		String localize(String key);
 	}
 
 	private void resetView() {
@@ -247,27 +274,27 @@ public class EditSubstitutionPresenter implements Presenter,
 
 	private boolean isDataValid() {
 		if (view.getRole().isEmpty()) {
-			statusIndicator.setWarnStatus("The role is not selected");
+			statusIndicator.setWarnStatus(messages.validationRoleIsNotSelected());
 			return false;
 		}
 
 		if (view.getSubstituror().isEmpty()) {
-			statusIndicator.setWarnStatus("The substitutor is not selected");
+			statusIndicator.setWarnStatus(messages.validationSubstitutorIsNotSelected());
 			return false;
 		}
 
 		if (view.getRuleType().isEmpty()) {
-			statusIndicator.setWarnStatus("The rule is not selected");
+			statusIndicator.setWarnStatus(messages.validationRuleIsNotSelected());
 			return false;
 		}
 
 		if (ruleTypes.get(view.getRuleType()).isInterval()) {
 			if (view.getBeginDate() == null) {
-				statusIndicator.setWarnStatus("The beginDate is not selected");
+				statusIndicator.setWarnStatus(messages.validationBeginDataIsNotSelected());
 				return false;
 			}
 			if (view.getEndDate() == null) {
-				statusIndicator.setWarnStatus("The endDate is not selected");
+				statusIndicator.setWarnStatus(messages.validationEndDataIsNotSelected());
 				return false;
 			}
 		}

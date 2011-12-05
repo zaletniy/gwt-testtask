@@ -22,6 +22,9 @@ public interface ResourceBundle extends ClientBundle {
 	@Source("wind_icon.gif")
 	public ImageResource substitutionWindowIcon();
 	
+	@Source("wind_icon2.gif")
+	public ImageResource substitutionEditWindowIcon();
+	
 	@Source("close_btn.gif")
 	public ImageResource closeButtonIcon();
 	

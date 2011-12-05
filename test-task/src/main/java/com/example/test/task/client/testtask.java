@@ -20,13 +20,6 @@ public class TestTask implements EntryPoint {
 	static{
 		ResourceBundle.INSTANCE.css().ensureInjected();
 	}
-	/**
-	 * The message displayed to the user when the server cannot be reached or
-	 * returns an error.
-	 */
-	private static final String SERVER_ERROR = "An error occurred while "
-			+ "attempting to contact the server. Please check your network "
-			+ "connection and try again.";
 
 	/**
 	 * Create a remote service proxy to talk to the server-side Greeting
@@ -34,8 +27,6 @@ public class TestTask implements EntryPoint {
 	 */
 	private final SubstitutionManagementServiceAsync substitutionService = GWT
 			.create(SubstitutionManagementService.class);
-
-	private final Messages messages = GWT.create(Messages.class);
 
 	private EventBus eventBus = new SimpleEventBus();
 	
