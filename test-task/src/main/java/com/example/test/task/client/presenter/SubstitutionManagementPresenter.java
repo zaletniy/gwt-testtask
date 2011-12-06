@@ -7,7 +7,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 
 import com.example.test.task.client.Messages;
-import com.example.test.task.client.NonStringMessages;
 import com.example.test.task.client.SubstitutionManagementServiceAsync;
 import com.example.test.task.client.event.CreateSubstitutionEvent;
 import com.example.test.task.client.event.EditSubstitutionEvent;
@@ -28,7 +27,6 @@ import com.google.gwt.view.client.ProvidesKey;
 public class SubstitutionManagementPresenter implements Presenter,
 		SubstitutionManagementView.Presenter<SubstitutionDetails> {
 	private Messages messages=GWT.create(Messages.class);
-	private NonStringMessages nonStringMessages=GWT.create(NonStringMessages.class);
 	SubstitutionManagementView<SubstitutionDetails> view;
 	SubstitutionManagementServiceAsync service;
 	StatusIndicator statusIndicator;
@@ -164,7 +162,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> roleColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				return nonStringMessages.roles(object.getRole());
+				return messages.roles(object.getRole());
 			}
 		};
 		roleColumn.setSortable(true);
@@ -182,7 +180,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> ruleTypeColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				return nonStringMessages.rules(object.getRuleType());
+				return messages.rules(object.getRuleType());
 			}
 		};
 		ruleTypeColumn.setSortable(true);
@@ -199,7 +197,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> beginDateColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				return object.getEndDate()!=null?nonStringMessages.dateFormat(object.getBeginDate()):"";
+				return object.getEndDate()!=null?messages.dateFormat(object.getBeginDate()):"";
 			}
 		};
 		beginDateColumn.setSortable(true);
@@ -216,7 +214,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		TextColumn<SubstitutionDetails> endDateColumn=new TextColumn<SubstitutionDetails>() {
 			@Override
 			public String getValue(SubstitutionDetails object) {
-				return object.getEndDate()!=null?nonStringMessages.dateFormat(object.getEndDate()):"";
+				return object.getEndDate()!=null?messages.dateFormat(object.getEndDate()):"";
 			}
 		};
 		endDateColumn.setSortable(true);

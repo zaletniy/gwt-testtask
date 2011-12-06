@@ -1,9 +1,7 @@
 package com.example.test.task.client;
 
-import com.example.test.task.shared.FieldVerifier;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.rpc.ServiceDefTarget;
 
 /**
@@ -23,18 +21,6 @@ public class GwtTesttesttask extends GWTTestCase {
    */
   public String getModuleName() {
     return "com.example.test.task.testtaskJUnit";
-  }
-
-  /**
-   * Tests the FieldVerifier.
-   */
-  public void testFieldVerifier() {
-    assertFalse(FieldVerifier.isValidName(null));
-    assertFalse(FieldVerifier.isValidName(""));
-    assertFalse(FieldVerifier.isValidName("a"));
-    assertFalse(FieldVerifier.isValidName("ab"));
-    assertFalse(FieldVerifier.isValidName("abc"));
-    assertTrue(FieldVerifier.isValidName("abcd"));
   }
 
   /**

@@ -52,7 +52,7 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	PushButton okButton;
 	
 	@UiField(provided = true)
-	CellTable<T> table=new CellTable<T>(10,TableResources.INSTANCE);
+	CellTable<T> table=new CellTable<T>(10000,TableResources.INSTANCE);
 	
 	@UiField
 	TabPanel tabPanel;

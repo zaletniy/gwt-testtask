@@ -6,7 +6,6 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import com.example.test.task.client.Messages;
-import com.example.test.task.client.NonStringMessages;
 import com.example.test.task.client.SubstitutionManagementServiceAsync;
 import com.example.test.task.client.event.CreateSubstitutionEvent;
 import com.example.test.task.client.event.CreateSubstitutionEventHandler;
@@ -27,10 +26,9 @@ import com.google.gwt.user.client.ui.HasWidgets;
 public class EditSubstitutionPresenter implements Presenter,
 		com.example.test.task.client.view.EditSubstitutionView.Presenter {
 	
-	private NonStringMessages nonStringMessages = GWT
-			.create(NonStringMessages.class);
-	private Messages messages=GWT.create(Messages.class);
-	
+	private Messages messages = GWT
+			.create(Messages.class);
+
 	EventBus eventBus;
 	final EditSubstitutionView view;
 	SubstitutionManagementServiceAsync service;
@@ -90,14 +88,14 @@ public class EditSubstitutionPresenter implements Presenter,
 				view.setRoles(namedDataToMap(result.getRoles(),
 						new Localizer() {
 							public String localize(String key) {
-								return nonStringMessages.roles(key);
+								return messages.roles(key);
 							}
 						},messages.pleaseSelectRole()));
 
 				view.setRuleTypes(namedDataToMap(result.getRuleTypes(),
 						new Localizer() {
 							public String localize(String key) {
-								return nonStringMessages.rules(key);
+								return messages.rules(key);
 							}
 						},messages.pleaseSelectRuleType()));
 				view.setSubstitors(namedDataToMap(result.getSubstitutors(),

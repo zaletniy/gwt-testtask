@@ -18,6 +18,19 @@ public interface ResourceBundle extends ClientBundle {
 	
 	@Source("create.gif")
 	public DataResource createIconResource();
+		
+	@Source("update_active_icon.gif")
+	public DataResource updateIconResource();
+	
+	@Source("update.gif")
+	public DataResource updateIconDisabledResource();
+	
+	@Source("delete_active_icon.gif")
+	public DataResource deleteIconResource();
+	
+	@Source("delete.gif")
+	public DataResource deleteIconDisabledResource();
+	
 	
 	@Source("wind_icon.gif")
 	public ImageResource substitutionWindowIcon();
@@ -55,6 +68,43 @@ public interface ResourceBundle extends ClientBundle {
 	@Source("right_middle_cen.png")
 	public DataResource middleRightBackground();
 	
+	@Source("btn_bg_l.png")
+	public DataResource buttonLeftBackgroungResource();
+	
+	@Source("btn_bg_r.png")
+	public DataResource buttonRightBackgroungResource();
+	
+	@Source("btn_bg_c.png")
+	public DataResource buttonCenterBackgroungResource();
+	
+	@Source("cancel_icon.png")
+	public DataResource cancelIconResource();
+	
+	
+	@Source("tab_active_bg_l.jpg")
+	public DataResource tabActiveBackgroundLeftResource();
+	
+	@Source("tab_active_bg_r.jpg")
+	public DataResource tabActiveBackgroundRightResource();
+	
+	@Source("tab_state_bg_l.jpg")
+	public DataResource tabBackgroundLeftResource();
+	
+	@Source("tab_state_bg_r.jpg")
+	public DataResource tabBackgroundRightResource();
+	
+	@Source("tab_nav_bg.gif")
+	public DataResource tabNavigationBackgroundRightResource();
+	
+	@Source("control_panel_bg.gif")
+	public DataResource controlPanelBackgroundResource();
+	
+	
+	@Source("date_picker.gif")
+	public DataResource datePickerIconResource();
+	
+	@Source("save_icon.png")
+	public DataResource saveButtonIconResource();
 	
 	public interface Style extends CssResource {
 	    String tabStyle();

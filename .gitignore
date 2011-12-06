@@ -2,3 +2,5 @@
 ###################
 target
 .gwt
+.gwt-log
+test-task/.gwt/.gwt-log

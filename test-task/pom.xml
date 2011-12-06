@@ -115,7 +115,9 @@
 						<goals>
 							<goal>compile</goal>
 							<goal>test</goal>
+							<!-- 
 							<goal>i18n</goal>
+							 -->
 							<goal>generateAsync</goal>
 						</goals>
 					</execution>
@@ -125,7 +127,9 @@
 				<configuration>
 					<runTarget>testtask.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
+					<!-- 
 					<i18nMessagesBundle>com.example.test.task.client.Messages</i18nMessagesBundle>
+					 -->
 				</configuration>
 			</plugin>
 

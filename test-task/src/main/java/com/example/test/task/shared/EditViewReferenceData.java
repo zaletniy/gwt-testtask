@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 public class EditViewReferenceData implements Serializable {
+	private static final long serialVersionUID = -519759987007776918L;
 	List<NamedData> roles;
 	List<NamedData> substitutors;
 	List<RuleType> ruleTypes;

@@ -13,14 +13,14 @@
 			</u:windowImage>
 			<u:controllPanel/>
 			<u:contentPanel>
-				<g:VerticalPanel>
-					<g:Grid>
+				<g:VerticalPanel stylePrimaryName="dialogBoxPanel">
+					<g:Grid stylePrimaryName="dialoBoxGrid">
 						<g:row>
 							<g:customCell>
 								<g:Label text="{messages.roleLabel}" />
 							</g:customCell>
 							<g:customCell>
-								<g:ListBox ui:field="roleLbx" />
+								<g:ListBox ui:field="roleLbx" stylePrimaryName="dialogBoxSelectControl" />
 							</g:customCell>
 						</g:row>
 						<g:row>
@@ -28,15 +28,15 @@
 								<g:Label text="{messages.substituteLabel}" />
 							</g:customCell>
 							<g:customCell>
-								<g:ListBox ui:field="substituteLbx" />
+								<g:ListBox ui:field="substituteLbx" stylePrimaryName="dialogBoxSelectControl" />
 							</g:customCell>
 						</g:row>
 						<g:row>
 							<g:customCell>
-								<g:Label text="{messages.ruleTypeLabel}" />
+								<g:Label text="{messages.ruleTypeLabel}"/>
 							</g:customCell>
 							<g:customCell>
-								<g:ListBox ui:field="ruleTypeLbx" />
+								<g:ListBox ui:field="ruleTypeLbx"  stylePrimaryName="dialogBoxSelectControl"/>
 							</g:customCell>
 						</g:row>
 						<g:row>
@@ -50,7 +50,7 @@
 								<g:Label text="{messages.beginLabel}" />
 							</g:customCell>
 							<g:customCell>
-								<p1:DateBox ui:field="beginDbx"></p1:DateBox>
+								<p1:DateBox ui:field="beginDbx" stylePrimaryName="dialogBoxDateBox"></p1:DateBox>
 							</g:customCell>
 						</g:row>
 						<g:row>
@@ -58,15 +58,28 @@
 								<g:Label text="{messages.endLabel}" />
 							</g:customCell>
 							<g:customCell>
-								<p1:DateBox ui:field="endDbx"></p1:DateBox>
+								<p1:DateBox ui:field="endDbx" stylePrimaryName="dialogBoxDateBox"></p1:DateBox>
 							</g:customCell>
 						</g:row>
 
 					</g:Grid>
-					<g:HorizontalPanel horizontalAlignment="ALIGN_RIGHT"
-						verticalAlignment="ALIGN_MIDDLE">
-						<g:PushButton text="{messages.cancelButton}" ui:field="cancelButton" />
-						<g:PushButton text="{messages.saveButton}" ui:field="saveButton" />
+					<g:HorizontalPanel stylePrimaryName="dialogBoxControls">
+						<g:PushButton ui:field="cancelButton" stylePrimaryName="cancelButton simpleButton">
+							<g:upFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.cancelButton}"/></div></div><div class="buttonBgRight"></div></g:upFace>
+							<g:downFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.cancelButton}"/></div></div><div class="buttonBgRight"></div></g:downFace>
+							<g:upHoveringFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.cancelButton}"/></div></div><div class="buttonBgRight"></div></g:upHoveringFace> 
+							<g:downHoveringFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.cancelButton}"/></div></div><div class="buttonBgRight"></div></g:downHoveringFace> 
+							<g:upDisabledFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.cancelButton}"/></div></div><div class="buttonBgRight"></div></g:upDisabledFace> 
+							<g:downDisabledFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.cancelButton}"/></div></div><div class="buttonBgRight"></div></g:downDisabledFace>
+						</g:PushButton>
+						<g:PushButton ui:field="saveButton" stylePrimaryName="saveButton simpleButton">
+							<g:upFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.saveButton}"/></div></div><div class="buttonBgRight"></div></g:upFace>
+							<g:downFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.saveButton}"/></div></div><div class="buttonBgRight"></div></g:downFace>
+							<g:upHoveringFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.saveButton}"/></div></div><div class="buttonBgRight"></div></g:upHoveringFace> 
+							<g:downHoveringFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.saveButton}"/></div></div><div class="buttonBgRight"></div></g:downHoveringFace> 
+							<g:upDisabledFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.saveButton}"/></div></div><div class="buttonBgRight"></div></g:upDisabledFace> 
+							<g:downDisabledFace><div class="buttonBgCenter"><div class="buttonIcon"><ui:text from="{messages.saveButton}"/></div></div><div class="buttonBgRight"></div></g:downDisabledFace>
+						</g:PushButton>
 					</g:HorizontalPanel>
 				</g:VerticalPanel>
 			</u:contentPanel>

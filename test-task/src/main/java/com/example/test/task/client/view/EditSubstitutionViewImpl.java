@@ -5,11 +5,11 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import com.example.test.task.client.Messages;
-import com.example.test.task.client.NonStringMessages;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ChangeEvent;
 import com.google.gwt.event.dom.client.ChangeHandler;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -18,15 +18,11 @@ import com.google.gwt.user.client.ui.ListBox;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.datepicker.client.DateBox;
 import com.google.gwt.user.datepicker.client.DateBox.Format;
-import com.google.gwt.i18n.client.DateTimeFormat;
 
 public class EditSubstitutionViewImpl implements EditSubstitutionView {
 
 	private static EditSubstitutionViewImplUiBinder uiBinder = GWT
 			.create(EditSubstitutionViewImplUiBinder.class);
-	private NonStringMessages nonStringMessages = GWT
-			.create(NonStringMessages.class);
-	
 	private Messages messages = GWT
 			.create(Messages.class);
 	
@@ -194,7 +190,7 @@ public class EditSubstitutionViewImpl implements EditSubstitutionView {
 		}
 		
 		public String format(DateBox dateBox, Date date) {
-			return date==null?"":nonStringMessages.dateFormat(date);
+			return date==null?"":messages.dateFormat(date);
 		}
 	}
 }
