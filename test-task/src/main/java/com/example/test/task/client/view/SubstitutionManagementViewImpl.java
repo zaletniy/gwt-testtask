@@ -22,6 +22,7 @@ import com.google.gwt.user.cellview.client.CellTable;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
+import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.user.client.ui.PushButton;
 import com.google.gwt.user.client.ui.TabPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -68,6 +69,8 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	MultiSelectionModel<T> selectionModel;
 
 	MutableListHandler<T> sortHandler;
+	
+	HasWidgets container;
 
 	@SuppressWarnings("rawtypes")
 	interface SubstitutionManagementViewImplUiBinder extends
@@ -96,7 +99,8 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	interface TableStyle extends CellTable.Style {
 	}
 
-	public SubstitutionManagementViewImpl() {
+	public SubstitutionManagementViewImpl(HasWidgets container) {
+		this.container=container;
 		initWidget(uiBinder.createAndBindUi(this));
 		tabPanel.selectTab(0);
 	}
@@ -192,6 +196,11 @@ public class SubstitutionManagementViewImpl<T> extends Composite implements
 	@UiHandler("okButton")
 	void onOkClick(ClickEvent event) {
 		Window.alert(messages.notDefined());
+	}
+
+	public void go() {
+		container.clear();
+		container.add(this);
 	}
 
 }

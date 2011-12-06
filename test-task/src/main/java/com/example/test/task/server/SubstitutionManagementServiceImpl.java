@@ -18,12 +18,16 @@ import com.google.gwt.rpc.client.impl.RemoteException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * The server side implementation of the RPC service.
+ * The server side fake implementation of the RPC service.
+ * 
+ * @author Ilya Sviridov
+ * 
  */
 
-// TODO: make refactorung to extrat datasource layer
 public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 		implements SubstitutionManagementService {
+
+	private static final long serialVersionUID = 2442035806970897062L;
 
 	protected Map<Integer, Substitution> data;
 

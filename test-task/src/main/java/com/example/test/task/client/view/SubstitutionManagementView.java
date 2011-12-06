@@ -9,7 +9,7 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.client.ui.IsWidget;
 import com.google.gwt.view.client.ProvidesKey;
 
-public interface SubstitutionManagementView<T> extends IsWidget {
+public interface SubstitutionManagementView<T>{
 	public interface Presenter<T> {
 		void onCreateAction();
 
@@ -33,4 +33,6 @@ public interface SubstitutionManagementView<T> extends IsWidget {
 	void enableDeleteControl(boolean enabled);
 
 	void setPresenter(Presenter<T> presenter);
+	
+	void go();
 }

@@ -11,6 +11,7 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
+import com.example.test.task.client.Messages;
 import com.google.gwt.user.client.ui.RootPanel;
 
 /**
@@ -31,6 +32,8 @@ public class TestTask implements EntryPoint {
 	private EventBus eventBus = new SimpleEventBus();
 	
 	private StatusIndicator statusIndicator=new SpanStatusIndicator();
+	
+	private Messages messages=GWT.create(Messages.class);
 
 	EditSubstitutionPresenter editSubstitutionPresenter = null;
 
@@ -38,10 +41,10 @@ public class TestTask implements EntryPoint {
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		SubstitutionManagementViewImpl<SubstitutionDetails> view = new SubstitutionManagementViewImpl<SubstitutionDetails>();
+		SubstitutionManagementViewImpl<SubstitutionDetails> view = new SubstitutionManagementViewImpl<SubstitutionDetails>(RootPanel.get("application"));
 		SubstitutionManagementPresenter presenter = new SubstitutionManagementPresenter(
-				view, substitutionService, statusIndicator, eventBus);
-		presenter.go(RootPanel.get("application"));
+				view, substitutionService, statusIndicator, eventBus,messages);
+		presenter.go();
 
 		EditSubstitutionViewImpl editSubstitutionViewImpl = new EditSubstitutionViewImpl();
 		editSubstitutionPresenter = new EditSubstitutionPresenter(eventBus,

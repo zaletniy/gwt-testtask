@@ -301,4 +301,9 @@ public class EditSubstitutionPresenter implements Presenter,
 
 	}
 
+	public void go() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

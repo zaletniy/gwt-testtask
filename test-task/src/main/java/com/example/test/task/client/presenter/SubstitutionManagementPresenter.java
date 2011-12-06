@@ -16,17 +16,15 @@ import com.example.test.task.client.view.StatusIndicator;
 import com.example.test.task.client.view.SubstitutionManagementView;
 import com.example.test.task.shared.SubstitutionDetails;
 import com.example.test.task.shared.Utils;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.user.client.ui.HasWidgets;
 import com.google.gwt.view.client.ProvidesKey;
 
 public class SubstitutionManagementPresenter implements Presenter,
 		SubstitutionManagementView.Presenter<SubstitutionDetails> {
-	private Messages messages=GWT.create(Messages.class);
+	private Messages messages;
 	SubstitutionManagementView<SubstitutionDetails> view;
 	SubstitutionManagementServiceAsync service;
 	StatusIndicator statusIndicator;
@@ -35,12 +33,13 @@ public class SubstitutionManagementPresenter implements Presenter,
 
 	public SubstitutionManagementPresenter(
 			SubstitutionManagementView<SubstitutionDetails> view,
-			SubstitutionManagementServiceAsync service,StatusIndicator statusIndicator, EventBus eventBus) {
+			SubstitutionManagementServiceAsync service,StatusIndicator statusIndicator, EventBus eventBus, Messages messages) {
 		super();
 		this.view = view;
 		this.service = service;
 		this.eventBus = eventBus;
 		this.statusIndicator=statusIndicator;
+		this.messages=messages;
 		view.setPresenter(this);
 		initView();
 		fetchData();
@@ -52,9 +51,8 @@ public class SubstitutionManagementPresenter implements Presenter,
 		});
 	}
 
-	public void go(HasWidgets container) {
-		container.clear();
-		container.add(view.asWidget());
+	public void go() {
+		view.go();
 	}
 
 	public void onCreateAction() {

@@ -50,6 +50,12 @@
 			<classifier>sources</classifier>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.1</version>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -74,7 +80,6 @@
 										<artifactId>gwt-maven-plugin</artifactId>
 										<versionRange>[2.4.0,)</versionRange>
 										<goals>
-											<!-- <goal>compile</goal> -->
 											<goal>i18n</goal>
 											<goal>generateAsync</goal>
 										</goals>
@@ -115,9 +120,6 @@
 						<goals>
 							<goal>compile</goal>
 							<goal>test</goal>
-							<!-- 
-							<goal>i18n</goal>
-							 -->
 							<goal>generateAsync</goal>
 						</goals>
 					</execution>
@@ -127,9 +129,6 @@
 				<configuration>
 					<runTarget>testtask.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
-					<!-- 
-					<i18nMessagesBundle>com.example.test.task.client.Messages</i18nMessagesBundle>
-					 -->
 				</configuration>
 			</plugin>
 
@@ -161,5 +160,4 @@
 			</plugin>
 		</plugins>
 	</build>
-
 </project>
