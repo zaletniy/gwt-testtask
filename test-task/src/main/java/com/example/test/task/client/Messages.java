@@ -14,12 +14,12 @@ public interface Messages extends com.google.gwt.i18n.client.Messages {
 
 	@DefaultMessage("Not localized role")
 	@AlternateMessage({ "fullTimeRole", "Full time", "partTimeRole",
-			"Part time", })
+			"Part time"})
 	String roles(@Select String roleName);
 
 	@DefaultMessage("Not localized rule")
 	@AlternateMessage({ "alwaysRuleType", "Always", "intervalRuleType",
-			"Interval", "inactiveRuleType", "Inactive", })
+			"Interval", "inactiveRuleType", "Inactive"})
 	String rules(@Select String ruleName);
 
 	/**
