@@ -22,15 +22,44 @@ import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.view.client.ProvidesKey;
 
+/**
+ * Substitution management view presenter.
+ * 
+ * @author Ilya Sviridov
+ *
+ */
 public class SubstitutionManagementPresenter implements Presenter,
 		SubstitutionManagementView.Presenter<SubstitutionDetails> {
+	/**
+	 * Messages
+	 */
 	private Messages messages;
+	/**
+	 * View
+	 */
 	SubstitutionManagementView<SubstitutionDetails> view;
+	/**
+	 * RPC stub
+	 */
 	SubstitutionManagementServiceAsync service;
+	/**
+	 * Status indicator. See {@link StatusIndicator}}
+	 */
 	StatusIndicator statusIndicator;
 
+	/**
+	 * Event bus
+	 */
 	EventBus eventBus;
 
+	/**
+	 * Constructor 
+	 * @param view
+	 * @param service
+	 * @param statusIndicator
+	 * @param eventBus
+	 * @param messages
+	 */
 	public SubstitutionManagementPresenter(
 			SubstitutionManagementView<SubstitutionDetails> view,
 			SubstitutionManagementServiceAsync service,StatusIndicator statusIndicator, EventBus eventBus, Messages messages) {
@@ -51,14 +80,23 @@ public class SubstitutionManagementPresenter implements Presenter,
 		});
 	}
 
+	/**
+	 * Go method
+	 */
 	public void go() {
 		view.go();
 	}
-
+	
+	/**
+	 * Called by view on create action 
+	 */
 	public void onCreateAction() {
 		eventBus.fireEvent(new CreateSubstitutionEvent());
 	}
 
+	/**
+	 * Called by view on update action 
+	 */
 	public void onUpdateAction() {
 		if(view.getSelectedItems().size()==1){
 			 eventBus.fireEvent(new EditSubstitutionEvent(view.getSelectedItems().iterator().next().getId()));
@@ -66,7 +104,10 @@ public class SubstitutionManagementPresenter implements Presenter,
 			statusIndicator.setErrorStatus(messages.statusInternalError());
 		}
 	}
-
+	
+	/**
+	 * Called by view on delete action 
+	 */
 	@SuppressWarnings("rawtypes")
 	public void onDeleteAction() {
 		
@@ -78,7 +119,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		for(SubstitutionDetails item:selectedItems)
 			ids.add(item.getId());
 		
-		service.deleteSubstitution(ids,new AsyncCallback<List<SubstitutionDetails>>() {
+		service.deleteSubstitution(ids,new AsyncCallback<List>() {
 			public void onFailure(Throwable caught) {
 				statusIndicator.setErrorStatus(messages.statusErrorDuringDeleting(caught.getMessage()));				
 			}
@@ -92,12 +133,15 @@ public class SubstitutionManagementPresenter implements Presenter,
 			}
 		}); 
 	}
-
+	
+	/**
+	 * Loads data from server
+	 */
 	@SuppressWarnings("rawtypes")
 	protected void fetchData() {
 		
 		  statusIndicator.setInfoStatus(messages.statusLoadingData());
-		  service.getSubstitutions(new AsyncCallback<List<SubstitutionDetails>>() {
+		  service.getSubstitutions(new AsyncCallback<List>() {
 			
 			@SuppressWarnings("unchecked")
 			public void onSuccess(List result) {
@@ -111,7 +155,10 @@ public class SubstitutionManagementPresenter implements Presenter,
 		});
 		 
 	}
-
+	
+	/**
+	 * Called on select event
+	 */
 	public void onSelect(Collection<SubstitutionDetails> selctedItems) {
 		if (selctedItems.size() == 1) {
 			view.enableDeleteControl(true);
@@ -128,7 +175,10 @@ public class SubstitutionManagementPresenter implements Presenter,
 			}
 		}
 	}
-
+	
+	/**
+	 * Initalize view with table data structure and behaviour
+	 */
 	private void initView(){
 		ProvidesKey<SubstitutionDetails> providesKey=new ProvidesKey<SubstitutionDetails>() {
 			public Integer getKey(SubstitutionDetails item) {

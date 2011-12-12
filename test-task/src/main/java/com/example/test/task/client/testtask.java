@@ -16,40 +16,51 @@ import com.google.gwt.user.client.ui.RootPanel;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
+ * 
+ * @author Ilya Sviridov
  */
 public class TestTask implements EntryPoint {
-	static{
+	/**
+	 * Injection of css
+	 */
+	static {
 		ResourceBundle.INSTANCE.css().ensureInjected();
 	}
 
 	/**
-	 * Create a remote service proxy to talk to the server-side Greeting
-	 * service.
+	 * Create a remote service proxy to talk to the server-side
 	 */
 	private final SubstitutionManagementServiceAsync substitutionService = GWT
 			.create(SubstitutionManagementService.class);
 
+	/**
+	 * The event bus to wire pieces of functionality
+	 */
 	private EventBus eventBus = new SimpleEventBus();
-	
-	private StatusIndicator statusIndicator=new SpanStatusIndicator();
-	
-	private Messages messages=GWT.create(Messages.class);
 
-	EditSubstitutionPresenter editSubstitutionPresenter = null;
+	/**
+	 * Span to show what happens or what is wrong
+	 */
+	private StatusIndicator statusIndicator = new SpanStatusIndicator();
+
+	/**
+	 * Localized messages
+	 */
+	private Messages messages = GWT.create(Messages.class);
 
 	/**
 	 * This is the entry point method.
 	 */
 	public void onModuleLoad() {
-		SubstitutionManagementViewImpl<SubstitutionDetails> view = new SubstitutionManagementViewImpl<SubstitutionDetails>(RootPanel.get("application"));
-		SubstitutionManagementPresenter presenter = new SubstitutionManagementPresenter(
-				view, substitutionService, statusIndicator, eventBus,messages);
+		SubstitutionManagementViewImpl<SubstitutionDetails> view = new SubstitutionManagementViewImpl<SubstitutionDetails>(
+				RootPanel.get("application"));
+		SubstitutionManagementPresenter presenter = new SubstitutionManagementPresenter(view, substitutionService,
+				statusIndicator, eventBus, messages);
 		presenter.go();
 
 		EditSubstitutionViewImpl editSubstitutionViewImpl = new EditSubstitutionViewImpl();
-		editSubstitutionPresenter = new EditSubstitutionPresenter(eventBus,
-				editSubstitutionViewImpl,statusIndicator,substitutionService);
-
+		new EditSubstitutionPresenter(eventBus, editSubstitutionViewImpl, messages, statusIndicator,
+				substitutionService);
 
 	}
 }

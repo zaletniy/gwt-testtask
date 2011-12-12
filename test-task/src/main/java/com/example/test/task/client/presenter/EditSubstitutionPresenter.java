@@ -18,37 +18,85 @@ import com.example.test.task.shared.EditViewReferenceData;
 import com.example.test.task.shared.NamedData;
 import com.example.test.task.shared.RuleType;
 import com.example.test.task.shared.Substitution;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HasWidgets;
 
+/**
+ * Presenter for edit substitution functionality.
+ * 
+ * @author Ilya Sviridov
+ *
+ */
 public class EditSubstitutionPresenter implements Presenter,
 		com.example.test.task.client.view.EditSubstitutionView.Presenter {
-	
-	private Messages messages = GWT
-			.create(Messages.class);
+	/**
+	 * Messages
+	 */
+	private Messages messages;
 
+	/**
+	 * Event bus
+	 */
 	EventBus eventBus;
+	
+	/**
+	 * The view 
+	 */
 	final EditSubstitutionView view;
+	
+	/**
+	 *  RPC service stub
+	 */
 	SubstitutionManagementServiceAsync service;
+	
+	/**
+	 * Flag for lazy init 
+	 */
 	boolean isInited = false;
 
+	/**
+	 * Editing or creating substitution model
+	 */
 	Substitution substitution;
 
+	/**
+	 * Reference data. Roles
+	 */
 	Map<String, NamedData> roles;
+	
+	/**
+	 * Reference data. Substitutors
+	 */
 	Map<String, NamedData> substitutors;
+	
+	/**
+	 * Reference data. Rule types
+	 */
 	Map<String, RuleType> ruleTypes;
+	
+	/**
+	 * Status indicator. {@link StatusIndicator}
+	 */
 	StatusIndicator statusIndicator;
 
+	/**
+	 * Constructor
+	 * @param eventBus
+	 * @param view
+	 * @param messages
+	 * @param statusIndicator
+	 * @param service
+	 */
 	public EditSubstitutionPresenter(EventBus eventBus,
-			EditSubstitutionView view, StatusIndicator statusIndicator,
+			EditSubstitutionView view,Messages messages, StatusIndicator statusIndicator,
 			SubstitutionManagementServiceAsync service) {
 		super();
 		this.eventBus = eventBus;
 		this.view = view;
 		this.service = service;
 		this.statusIndicator = statusIndicator;
+		this.messages=messages;
 		view.setPresenter(this);
 
 		eventBus.addHandler(EditSubstitutionEvent.TYPE,
@@ -67,7 +115,10 @@ public class EditSubstitutionPresenter implements Presenter,
 				});
 
 	}
-
+	
+	/**
+	 * Init method. We load reference data here.
+	 */
 	protected void init() {
 		statusIndicator.setInfoStatus(messages.statusLoadingData());
 		service.getAllNamedData(new AsyncCallback<EditViewReferenceData>() {
@@ -114,8 +165,12 @@ public class EditSubstitutionPresenter implements Presenter,
 			}
 		});
 	}
-
-	public void editData(Integer substitutionId) {
+	
+	/**
+	 * Editing data
+	 * @param substitutionId substitution id
+	 */
+	private void editData(Integer substitutionId) {
 		if (!isInited)
 			init();
 
@@ -140,11 +195,17 @@ public class EditSubstitutionPresenter implements Presenter,
 			view.go();
 		}
 	}
-
+	
+	/**
+	 * Called by view when cancel action performed
+	 */
 	public void onCancelAction() {
 		statusIndicator.clear();
 	}
-
+	
+	/**
+	 * Called by view when save action performed
+	 */
 	public void onSaveAction() {
 		view.setSaveControllEnabled(false);
 		view.setCancelControllEnabled(false);
@@ -188,6 +249,9 @@ public class EditSubstitutionPresenter implements Presenter,
 		}
 	}
 
+	/**
+	 * Called by view when end date selected, so we can apply validation
+	 */
 	public void onEndDataSet() {
 		statusIndicator.clear();
 		if (view.getBeginDate() == null) {
@@ -204,7 +268,11 @@ public class EditSubstitutionPresenter implements Presenter,
 			return;
 		}
 	}
-
+	
+	/**
+	 * Called whed rule type is selected.
+	 * 
+	 */
 	public void onRuleTypesSelection() {
 		String selectedRuleType = view.getRuleType();
 		if ("".equals(selectedRuleType)) {
@@ -217,10 +285,20 @@ public class EditSubstitutionPresenter implements Presenter,
 			}
 		}
 	}
-
+	
+	/**
+	 * Just go method
+	 * @param container
+	 */
 	public void go(HasWidgets container) {
 	}
-
+	
+	/**
+	 * Puts data to view
+	 * 
+	 * @param view view
+	 * @param substitution model
+	 */
 	private void setData(EditSubstitutionView view, Substitution substitution) {
 		view.setRole(Integer.toString(substitution.getRoleId()));
 
@@ -239,7 +317,15 @@ public class EditSubstitutionPresenter implements Presenter,
 
 		view.setRuleType(Integer.toString(substitution.getRuleType().getId()));
 	}
-
+	
+	/**
+	 * Converts data to String level format for drop down lists
+	 * 
+	 * @param datas collection of data
+	 * @param localizer localizer for i18n
+	 * @param emptyItemName empty value is needed for nothing selected state
+	 * @return map
+	 */
 	private Map<String, String> namedDataToMap(
 			Collection<? extends NamedData> datas, Localizer localizer,
 			String emptyItemName) {
@@ -255,10 +341,19 @@ public class EditSubstitutionPresenter implements Presenter,
 		return hashMap;
 	}
 
+	/**
+	 * Util class for easier definition how to translate sting constant.
+	 * 
+	 * @author Ilya Sviridov
+	 *
+	 */
 	interface Localizer {
 		String localize(String key);
 	}
-
+	
+	/**
+	 * Resets view to nothing selected and inputed state
+	 */
 	private void resetView() {
 		view.setRole("");
 		view.setSubstitutor("");
@@ -269,7 +364,11 @@ public class EditSubstitutionPresenter implements Presenter,
 		view.setCancelControllEnabled(true);
 		view.setSaveControllEnabled(true);
 	}
-
+	
+	/**
+	 * Valitaion method
+	 * @return true if data is valid
+	 */
 	private boolean isDataValid() {
 		if (view.getRole().isEmpty()) {
 			statusIndicator.setWarnStatus(messages.validationRoleIsNotSelected());
@@ -295,15 +394,20 @@ public class EditSubstitutionPresenter implements Presenter,
 				statusIndicator.setWarnStatus(messages.validationEndDataIsNotSelected());
 				return false;
 			}
+			if (view.getEndDate().before(view.getBeginDate())) {
+				statusIndicator.setWarnStatus(messages.validationEndCantBeBeforeBeginData());
+				return false;
+			}
 		}
 
 		return true;
 
 	}
-
+	
+	/**
+	 * Go method
+	 */
 	public void go() {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

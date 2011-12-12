@@ -18,31 +18,48 @@ import com.google.gwt.rpc.client.impl.RemoteException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
 /**
- * The server side fake implementation of the RPC service.
+ * The server side fake implementation of the RPC service. Just fake, non thread
+ * save so on.
  * 
  * @author Ilya Sviridov
  * 
  */
 
-public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
-		implements SubstitutionManagementService {
+public class SubstitutionManagementServiceImpl extends RemoteServiceServlet implements SubstitutionManagementService {
 
 	private static final long serialVersionUID = 2442035806970897062L;
 
-	protected Map<Integer, Substitution> data;
+	/**
+	 * Data
+	 */
+	public static Map<Integer, Substitution> data;
 
-	protected NamedData[] substitutors = new NamedData[] {
-			new NamedData(1, "Bob"), new NamedData(2, "Joe") };
-	protected NamedData[] roles = new NamedData[] {
-			new NamedData(1, "fullTimeRole"), new NamedData(2, "partTimeRole") };
+	/**
+	 * Available substitutors
+	 */
+	public static NamedData[] substitutors = new NamedData[] { new NamedData(1, "Bob"), new NamedData(2, "Joe") };
 
-	protected RuleType[] ruleTypes = new RuleType[] {
-			new RuleType(1, "alwaysRuleType", false),
-			new RuleType(2, "intervalRuleType", true),
-			new RuleType(3, "inactiveRuleType", true) };
+	/**
+	 * Available roles
+	 */
+	public static NamedData[] roles = new NamedData[] { new NamedData(1, "fullTimeRole"),
+			new NamedData(2, "partTimeRole") };
 
-	protected int idCounter = 100;
+	/**
+	 * Available rule types
+	 */
+	public static RuleType[] ruleTypes = new RuleType[] { new RuleType(1, "alwaysRuleType", false),
+			new RuleType(2, "intervalRuleType", true), new RuleType(3, "inactiveRuleType", true) };
 
+	/**
+	 * Id generator
+	 */
+	public static int idCounter = 100;
+
+	/**
+	 * 
+	 * @return list of all substitutions
+	 */
 	public List<SubstitutionDetails> getSubstitutions() throws RemoteException {
 		try {
 			Thread.sleep(200);
@@ -54,10 +71,8 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 			Substitution source = entry.getValue();
 			SubstitutionDetails substitutionDetails = new SubstitutionDetails();
 			substitutionDetails.setId(source.getId());
-			substitutionDetails.setName(getById(source.getSubstitutionNameId(),
-					substitutors).getName());
-			substitutionDetails.setRole(getById(source.getRoleId(), roles)
-					.getName());
+			substitutionDetails.setName(getById(source.getSubstitutionNameId(), substitutors).getName());
+			substitutionDetails.setRole(getById(source.getRoleId(), roles).getName());
 			substitutionDetails.setRuleType(source.getRuleType().getName());
 			substitutionDetails.setBeginDate(source.getBeginDate());
 			substitutionDetails.setEndDate(source.getEndDate());
@@ -68,8 +83,14 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 		return substitutions;
 	}
 
-	public int saveSubstitution(Substitution substitution)
-			throws RemoteException {
+	/**
+	 * Saves new or updated substitution
+	 * 
+	 * @param substitution
+	 *            to save
+	 * @return id of saved item
+	 */
+	public int saveSubstitution(Substitution substitution) throws RemoteException {
 		if (substitution.getId() <= 0) {
 			substitution.setId(idCounter++);
 		}
@@ -77,29 +98,42 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 		return idCounter++;
 	}
 
+	/**
+	 * Returns whole substitution model
+	 * 
+	 * @param id
+	 *            of substitution
+	 * @return Substitution object
+	 */
 	public Substitution getSubstitution(int id) throws RemoteException {
-		return data.get(id);
+		return getData().get(id);
 	}
 
-	public List<SubstitutionDetails> deleteSubstitution(List<Integer> ids)
-			throws RemoteException {
+	/**
+	 * Deletes substitution by id
+	 * 
+	 * @param ids
+	 * @return left substitutions
+	 */
+	public List<SubstitutionDetails> deleteSubstitution(List<Integer> ids) throws RemoteException {
 		for (Integer id : ids) {
 			getData().remove(id);
 		}
 		return getSubstitutions();
 	}
 
+	/**
+	 * Cteares test data
+	 * 
+	 * @return data
+	 */
 	protected Map<Integer, Substitution> getData() {
 		if (data == null) {
 			data = new HashMap<Integer, Substitution>();
-			Substitution substitution1 = new Substitution(1, 1, 1,
-					ruleTypes[1], new Date(), new Date());
-			Substitution substitution2 = new Substitution(2, 2, 1,
-					ruleTypes[2], new Date(), new Date());
-			Substitution substitution3 = new Substitution(3, 2, 1,
-					ruleTypes[2], new Date(), new Date());
-			Substitution substitution4 = new Substitution(4, 1, 1,
-					ruleTypes[0], null, null);
+			Substitution substitution1 = new Substitution(1, 1, 1, ruleTypes[1], new Date(), new Date());
+			Substitution substitution2 = new Substitution(2, 2, 1, ruleTypes[2], new Date(), new Date());
+			Substitution substitution3 = new Substitution(3, 2, 1, ruleTypes[2], new Date(), new Date());
+			Substitution substitution4 = new Substitution(4, 1, 1, ruleTypes[0], null, null);
 
 			data.put(substitution1.getId(), substitution1);
 			data.put(substitution2.getId(), substitution2);
@@ -110,11 +144,18 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet
 		return data;
 	}
 
+	/**
+	 * Returns all reference data for edit view
+	 * 
+	 * @return EditViewReferenceData object
+	 */
 	public EditViewReferenceData getAllNamedData() {
-		return new EditViewReferenceData(Arrays.asList(roles),
-				Arrays.asList(substitutors), Arrays.asList(ruleTypes));
+		return new EditViewReferenceData(Arrays.asList(roles), Arrays.asList(substitutors), Arrays.asList(ruleTypes));
 	}
 
+	/**
+	 * returns data by id
+	 */
 	private NamedData getById(Integer id, NamedData[] namedDatas) {
 		for (NamedData namedData : namedDatas) {
 			if (id.equals(namedData.getId()))

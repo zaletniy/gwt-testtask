@@ -10,13 +10,33 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.ColumnSortEvent;
 import com.google.gwt.user.cellview.client.ColumnSortEvent.Handler;
 
+/**
+ * List handler for cell table, which can be modified.
+ * 
+ * @author Ilya Sviridov
+ *
+ * @param <T> date type
+ */
 public class MutableListHandler<T> implements Handler {
+	/**
+	 * Data
+	 */
 	private List<T> list;
+	
+	/**
+	 * Comparators
+	 */
 	private final Map<Column<?, ?>, Comparator<T>> comparators = new HashMap<Column<?, ?>, Comparator<T>>();
 
+	/**
+	 * Default constructor
+	 */
 	public MutableListHandler() {
 	}
 
+	/**
+	 * sorl event handler
+	 */
 	public void onColumnSort(ColumnSortEvent event) {
 		Column<?, ?> column = event.getColumn();
 		if (column == null) {
@@ -37,11 +57,20 @@ public class MutableListHandler<T> implements Handler {
 			});
 		}
 	}
-
+	
+	/**
+	 * Setter for data
+	 * @param data
+	 */
 	public void setData(List<T> data) {
 		list = data;
 	}
-
+	
+	/**
+	 * Setter for comparator
+	 * @param column
+	 * @param comparator
+	 */
 	public void setComparator(Column<T, ?> column, Comparator<T> comparator) {
 		comparators.put(column, comparator);
 	}
