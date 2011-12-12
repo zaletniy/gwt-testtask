@@ -119,7 +119,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 		for(SubstitutionDetails item:selectedItems)
 			ids.add(item.getId());
 		
-		service.deleteSubstitution(ids,new AsyncCallback<List>() {
+		service.deleteSubstitution(ids,new AsyncCallback<List<SubstitutionDetails>>() {
 			public void onFailure(Throwable caught) {
 				statusIndicator.setErrorStatus(messages.statusErrorDuringDeleting(caught.getMessage()));				
 			}
@@ -141,7 +141,7 @@ public class SubstitutionManagementPresenter implements Presenter,
 	protected void fetchData() {
 		
 		  statusIndicator.setInfoStatus(messages.statusLoadingData());
-		  service.getSubstitutions(new AsyncCallback<List>() {
+		  service.getSubstitutions(new AsyncCallback<List<SubstitutionDetails>>() {
 			
 			@SuppressWarnings("unchecked")
 			public void onSuccess(List result) {
