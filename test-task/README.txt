@@ -20,6 +20,3 @@ Prepare test coverage report
 ============================
 1. mvn cobertura:cobertura
 2. open with you browser target/site/cobertura/index.html
-
-If any questions feel free to ask.
-Ilya
