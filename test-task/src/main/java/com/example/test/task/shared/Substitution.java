@@ -3,6 +3,11 @@ package com.example.test.task.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
 /**
  * 
  * Substitution model.
@@ -10,6 +15,7 @@ import java.util.Date;
  * @author Ilya Sviridov
  * 
  */
+@Table(name="substitution")
 public class Substitution extends DataObject implements Serializable {
 
 	private static final long serialVersionUID = -2801786595784092447L;
@@ -17,26 +23,31 @@ public class Substitution extends DataObject implements Serializable {
 	/**
 	 * Sunstitutor name id
 	 */
+	@Column(name="substitution_name_id")
 	int substitutionNameId;
 
 	/**
 	 * role id
 	 */
+	@Column (name="role_name_id")
 	int roleId;
 
 	/**
 	 * Begin date
 	 */
+	@Column(name="begin_date")
 	Date beginDate;
 
 	/**
 	 * End date
 	 */
+	@Column(name="end_date")
 	Date endDate;
 
 	/**
 	 * Rule type
 	 */
+	//@OneToOne(orphanRemoval="false", )
 	RuleType ruleType;
 
 	/**

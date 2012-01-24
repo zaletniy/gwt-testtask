@@ -3,10 +3,20 @@
     PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN"
     "http://java.sun.com/dtd/web-app_2_3.dtd">
 <web-app>
+	
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
 	<!-- Servlets -->
 	<servlet>
 		<servlet-name>substitution</servlet-name>
 		<servlet-class>com.example.test.task.server.SubstitutionManagementServiceImpl</servlet-class>
+	</servlet>
+
+	<servlet>
+		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
+		<servlet-class>org.spring4gwt.server.SpringGwtRemoteServiceServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
@@ -14,6 +24,8 @@
 		<url-pattern>/testtask/substitution</url-pattern>
 	</servlet-mapping>
 
+	
+	
 	<!-- Default page to serve -->
 	<welcome-file-list>
 		<welcome-file>testtask.html</welcome-file>
