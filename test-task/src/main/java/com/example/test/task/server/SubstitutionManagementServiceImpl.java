@@ -8,7 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 import com.example.test.task.client.SubstitutionManagementService;
+import com.example.test.task.server.dao.NamedDataDAO;
 import com.example.test.task.shared.EditViewReferenceData;
 import com.example.test.task.shared.NamedData;
 import com.example.test.task.shared.RuleType;
@@ -16,6 +19,7 @@ import com.example.test.task.shared.Substitution;
 import com.example.test.task.shared.SubstitutionDetails;
 import com.google.gwt.rpc.client.impl.RemoteException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+
 
 /**
  * The server side fake implementation of the RPC service. Just fake, non thread
@@ -162,5 +166,16 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 				return namedData;
 		}
 		return null;
+	}
+	
+	@Autowired
+	NamedDataDAO namedDataDAO;
+
+	public List<NamedData> getAllNamedDataFromDB() {
+		return namedDataDAO.findAll();
+	}
+
+	public void saveNamedData(NamedData data) {
+		namedDataDAO.save(data);
 	}
 }
