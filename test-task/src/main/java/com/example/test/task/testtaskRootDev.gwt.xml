@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- has been created to speedup the development by compiling only one version 
+	for chrome and only one default location https://code.google.com/webtoolkit/doc/latest/DevGuideOrganizingProjects.html#DevGuideModuleXml -->
+<module rename-to='testtask'>
+	<!-- Inherit base module -->
+	<inherits name='com.example.test.task.testtask' />
+	<inherits name='com.example.test.task.tryspring' />
+
+	<!-- for development purpose only to make compilation faster -->
+	<set-property name="user.agent" value="safari" />
+	<set-property name="locale" value="default" />
+</module>
