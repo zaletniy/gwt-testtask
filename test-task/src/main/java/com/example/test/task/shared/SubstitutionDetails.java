@@ -3,12 +3,22 @@ package com.example.test.task.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Entity;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
+import javax.persistence.SecondaryTables;
+import javax.persistence.Table;
+
 /**
  * Substituition model with data.
  * 
  * @author Ilya Sviridov
- *
+ * 
  */
+//TODO
+//@Entity
+//@Table(name = "substitution_details")
+//@SecondaryTables({ @SecondaryTable(name = "substitutor", pkJoinColumns = { @PrimaryKeyJoinColumn(columnDefinition = "", referencedColumnName = "") }) })
 public class SubstitutionDetails extends DataObject implements Serializable {
 	private static final long serialVersionUID = -9127568820814721368L;
 
@@ -16,22 +26,22 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	 * Name
 	 */
 	String name;
-	
+
 	/**
 	 * Role
 	 */
 	String role;
-	
+
 	/**
 	 * Rule type
 	 */
 	String ruleType;
-	
+
 	/**
 	 * Begin date
 	 */
 	Date beginDate;
-	
+
 	/**
 	 * End date
 	 */
@@ -45,7 +55,8 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	}
 
 	/**
-	 * @param name the name to set
+	 * @param name
+	 *            the name to set
 	 */
 	public void setName(String name) {
 		this.name = name;
@@ -59,7 +70,8 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	}
 
 	/**
-	 * @param role the role to set
+	 * @param role
+	 *            the role to set
 	 */
 	public void setRole(String role) {
 		this.role = role;
@@ -73,7 +85,8 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	}
 
 	/**
-	 * @param ruleType the ruleType to set
+	 * @param ruleType
+	 *            the ruleType to set
 	 */
 	public void setRuleType(String ruleType) {
 		this.ruleType = ruleType;
@@ -87,7 +100,8 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	}
 
 	/**
-	 * @param beginDate the beginDate to set
+	 * @param beginDate
+	 *            the beginDate to set
 	 */
 	public void setBeginDate(Date beginDate) {
 		this.beginDate = beginDate;
@@ -101,12 +115,13 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	}
 
 	/**
-	 * @param endDate the endDate to set
+	 * @param endDate
+	 *            the endDate to set
 	 */
 	public void setEndDate(Date endDate) {
 		this.endDate = endDate;
 	}
-	
+
 	/**
 	 * Constructor
 	 * 
@@ -117,8 +132,8 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 	 * @param beginDate
 	 * @param endDate
 	 */
-	public SubstitutionDetails(int id, String name, String role, String ruleType,
-			Date beginDate, Date endDate) {
+	public SubstitutionDetails(int id, String name, String role,
+			String ruleType, Date beginDate, Date endDate) {
 		super(id);
 		this.id = id;
 		this.name = name;
@@ -127,7 +142,7 @@ public class SubstitutionDetails extends DataObject implements Serializable {
 		this.beginDate = beginDate;
 		this.endDate = endDate;
 	}
-	
+
 	/**
 	 * Constructor
 	 */

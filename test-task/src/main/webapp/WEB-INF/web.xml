@@ -9,22 +9,16 @@
 	</listener>
 
 	<!-- Servlets -->
-	<servlet>
-		<servlet-name>substitution</servlet-name>
-		<servlet-class>com.example.test.task.server.SubstitutionManagementServiceImpl</servlet-class>
-	</servlet>
-
+	
 	<servlet>
 		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
 		<servlet-class>org.spring4gwt.server.SpringGwtRemoteServiceServlet</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>substitution</servlet-name>
+		<servlet-name>springGwtRemoteServiceServlet</servlet-name>
 		<url-pattern>/testtask/substitution</url-pattern>
 	</servlet-mapping>
-
-	
 	
 	<!-- Default page to serve -->
 	<welcome-file-list>

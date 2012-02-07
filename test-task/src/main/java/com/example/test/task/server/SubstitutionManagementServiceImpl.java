@@ -8,15 +8,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.example.test.task.client.SubstitutionManagementService;
-import com.example.test.task.server.dao.NamedDataDAO;
+import com.example.test.task.server.dao.GenericDataDAO;
 import com.example.test.task.shared.EditViewReferenceData;
 import com.example.test.task.shared.NamedData;
 import com.example.test.task.shared.RuleType;
 import com.example.test.task.shared.Substitution;
 import com.example.test.task.shared.SubstitutionDetails;
+import com.example.test.task.shared.Substitutor;
 import com.google.gwt.rpc.client.impl.RemoteException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 
@@ -29,7 +35,14 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
  * 
  */
 
+@Service("substitution")
 public class SubstitutionManagementServiceImpl extends RemoteServiceServlet implements SubstitutionManagementService {
+	private static final Log LOG=LogFactory.getLog(SubstitutionManagementServiceImpl.class);
+	
+
+	public SubstitutionManagementServiceImpl() {
+		LOG.debug("The SubstitutionManagementServiceImpl service instance has been created "+this.hashCode());
+	}
 
 	private static final long serialVersionUID = 2442035806970897062L;
 
@@ -153,8 +166,11 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	 * 
 	 * @return EditViewReferenceData object
 	 */
+	
+	//TODO use generics with ?
 	public EditViewReferenceData getAllNamedData() {
-		return new EditViewReferenceData(Arrays.asList(roles), Arrays.asList(substitutors), Arrays.asList(ruleTypes));
+		List<? extends NamedData> substitutors=substitutorDAO.findAll(Substitutor.class);
+		return new EditViewReferenceData(Arrays.asList(roles),(List<NamedData>)substitutors, Arrays.asList(ruleTypes));
 	}
 
 	/**
@@ -169,13 +185,25 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	}
 	
 	@Autowired
-	NamedDataDAO namedDataDAO;
+	GenericDataDAO<Substitutor> substitutorDAO;
+	
 
-	public List<NamedData> getAllNamedDataFromDB() {
-		return namedDataDAO.findAll();
+	/* (non-Javadoc)
+	 * @see com.example.test.task.client.SubstitutionManagementService#getAllSubstitutors()
+	 */
+	public List<Substitutor> getAllSubstitutors() {
+		return substitutorDAO.findAll(Substitutor.class);
 	}
 
-	public void saveNamedData(NamedData data) {
-		namedDataDAO.save(data);
+	/* (non-Javadoc)
+	 * @see com.example.test.task.client.SubstitutionManagementService#saveSubstititor(com.example.test.task.shared.Substitutor)
+	 */
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
+	public void saveSubstititor(Substitutor substitutor)throws Exception {
+		substitutorDAO.save(substitutor);
 	}
+	
+	
+	
+	
 }

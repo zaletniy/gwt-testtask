@@ -4,9 +4,14 @@ import java.io.Serializable;
 import java.util.Date;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.LazyToOne;
+import org.hibernate.annotations.LazyToOneOption;
+
+import com.sun.istack.internal.NotNull;
 
 /**
  * 
@@ -15,7 +20,7 @@ import javax.persistence.Table;
  * @author Ilya Sviridov
  * 
  */
-@Table(name="substitution")
+//@Table(name="substitution")
 public class Substitution extends DataObject implements Serializable {
 
 	private static final long serialVersionUID = -2801786595784092447L;
@@ -23,13 +28,13 @@ public class Substitution extends DataObject implements Serializable {
 	/**
 	 * Sunstitutor name id
 	 */
-	@Column(name="substitution_name_id")
+	//@Column(name="substitution_name_id")
 	int substitutionNameId;
 
 	/**
 	 * role id
 	 */
-	@Column (name="role_name_id")
+	//@Column (name="role_name_id")
 	int roleId;
 
 	/**
@@ -47,7 +52,10 @@ public class Substitution extends DataObject implements Serializable {
 	/**
 	 * Rule type
 	 */
-	//@OneToOne(orphanRemoval="false", )
+	@OneToOne(optional=false)
+	@LazyToOne(LazyToOneOption.FALSE)
+	@JoinColumn(name="rule_type_id")
+	@NotNull
 	RuleType ruleType;
 
 	/**

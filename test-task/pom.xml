@@ -16,8 +16,19 @@
 		<!-- GWT needs at least java 1.5 -->
 		<webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+
+		<!-- dendency group versions -->
 		<hibernate-version>4.0.1.Final</hibernate-version>
 		<spring-version>3.1.0.RELEASE</spring-version>
+
+		<!-- default build setting -->
+		<hibernate.hbm2ddl.auto>validate</hibernate.hbm2ddl.auto>
+		<hibernate.show_sql>false</hibernate.show_sql>
+		<hibernate.dialect>org.hibernate.dialect.MySQL5InnoDBDialect</hibernate.dialect>
+		<hibernate.connection.driver_class>com.mysql.jdbc.Driver</hibernate.connection.driver_class>
+		<hibernate.connection.url>jdbc:mysql://localhost:3306/testtask</hibernate.connection.url>
+		<hibernate.connection.username>testtask</hibernate.connection.username>
+		<hibernate.connection.password>testtask</hibernate.connection.password>
 	</properties>
 
 	<repositories>
@@ -65,6 +76,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-web</artifactId>
 			<version>${spring-version}</version>
+		</dependency>
+		<dependency>
+			<groupId>cglib</groupId>
+			<artifactId>cglib</artifactId>
+			<version>2.2.2</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
@@ -128,11 +144,34 @@
 			<version>1.8.5</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+			<version>5.1.18</version>
+		</dependency>
 	</dependencies>
 
 	<build>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
+
+		<!-- to make profile based switching of database configuration -->
+		<resources>
+			<resource>
+				<directory>src/main/resources/</directory>
+				<filtering>true</filtering>
+				<includes>
+					<include>**/persistence.xml</include>
+				</includes>
+			</resource>
+			<resource>
+				<directory>src/main/resources/</directory>
+				<filtering>false</filtering>
+				<excludes>
+					<exclude>**/persistence.xml</exclude>
+				</excludes>
+			</resource>
+		</resources>
 		<pluginManagement>
 			<plugins>
 				<!--This plugin's configuration is used to store Eclipse m2e settings 
@@ -234,4 +273,12 @@
 			</plugin>
 		</plugins>
 	</build>
+	<profiles>
+		<profile>
+			<id>ilya-localhost</id>
+			<properties>
+				<hibernate.hbm2ddl.auto>create</hibernate.hbm2ddl.auto>
+			</properties>
+		</profile>
+	</profiles>
 </project>

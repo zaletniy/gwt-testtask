@@ -8,7 +8,15 @@
 		</layout>
 	</appender>
 
+	<logger name="org.hibernate">
+		<level value="DEBUG" />
+	</logger>
+	
 	<logger name="org.springframework">
+		<level value="DEBUG" />
+	</logger>
+	
+	<logger name="com.example.test.task">
 		<level value="DEBUG" />
 	</logger>
 

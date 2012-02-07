@@ -8,13 +8,15 @@
 		<provider>org.hibernate.ejb.HibernatePersistence</provider>
 
 		<properties>
-			<property name="hibernate.hbm2ddl.auto" value="update" />
-			<property name="hibernate.show_sql" value="false" />
-			<property name="hibernate.dialect" value="org.hibernate.dialect.HSQLDialect" />
-			<property name="hibernate.connection.driver_class" value="org.hsqldb.jdbcDriver" />
-			<property name="hibernate.connection.url" value="jdbc:hsqldb:mem:testtask" />
-			<property name="hibernate.connection.username" value="sa" />
-			<property name="hibernate.connection.password" value="" />
+			<property name="hibernate.hbm2ddl.auto" value="${hibernate.hbm2ddl.auto}" />
+			
+			<property name="hibernate.show_sql" value="true" />
+			
+			<property name="hibernate.dialect" value="${hibernate.dialect}" />
+			<property name="hibernate.connection.driver_class" value="${hibernate.connection.driver_class}" />
+			<property name="hibernate.connection.url" value="${hibernate.connection.url}" />
+			<property name="hibernate.connection.username" value="${hibernate.connection.username}" />
+			<property name="hibernate.connection.password" value="${hibernate.connection.password}" />
 
 			<property name="hibernate.c3p0.min_size" value="5" />
 			<property name="hibernate.c3p0.max_size" value="20" />

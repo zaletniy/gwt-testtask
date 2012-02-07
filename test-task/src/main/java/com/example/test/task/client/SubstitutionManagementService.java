@@ -2,14 +2,11 @@ package com.example.test.task.client;
 
 import java.util.List;
 
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
-
 import com.example.test.task.shared.EditViewReferenceData;
 import com.example.test.task.shared.NamedData;
 import com.example.test.task.shared.Substitution;
 import com.example.test.task.shared.SubstitutionDetails;
+import com.example.test.task.shared.Substitutor;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
 
@@ -19,7 +16,6 @@ import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
  * @author Ilya Sviridov
  */
 
-@Service("substitutionService")
 @RemoteServiceRelativePath("substitution")
 public interface SubstitutionManagementService extends RemoteService {
 	/**
@@ -60,20 +56,8 @@ public interface SubstitutionManagementService extends RemoteService {
 	 * @return EditViewReferenceData object
 	 */
 	EditViewReferenceData getAllNamedData();
-
-	/**
-	 * The test method to try spring + gwt + hibernate. Should be refactored
-	 * after prototyping stage
-	 */
-	@Deprecated
-	List<NamedData> getAllNamedDataFromDB();
-
-	/**
-	 * The test method to try spring + gwt + hibernate. Should be refactored
-	 * after prototyping stage
-	 */
-	@Deprecated
-	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
-	void saveNamedData(NamedData data) throws Exception;
-
+	
+	List<Substitutor> getAllSubstitutors();
+	
+	void saveSubstititor(Substitutor substitutor) throws Exception;
 }
