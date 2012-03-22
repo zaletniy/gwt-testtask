@@ -6,6 +6,8 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Type;
+
 /**
  * 
  * Rule type model.
@@ -23,6 +25,7 @@ public class RuleType extends NamedData implements Serializable {
 	 * Is it interval rule
 	 */
 	@Column(name = "is_interval")
+	@Type(type = "org.hibernate.type.NumericBooleanType")
 	boolean interval = false;
 
 	/**

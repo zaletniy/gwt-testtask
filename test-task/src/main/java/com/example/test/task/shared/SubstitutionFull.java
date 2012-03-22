@@ -28,6 +28,7 @@ public class SubstitutionFull extends DataObject {
 	@OneToOne
 	@NotNull
 	@LazyToOne(LazyToOneOption.FALSE)
+	@JoinColumn(name="substitutor_id")
 	Substitutor substitutor;
 	
 	@OneToOne
@@ -39,6 +40,7 @@ public class SubstitutionFull extends DataObject {
 	@OneToOne
 	@NotNull
 	@LazyToOne(LazyToOneOption.FALSE)
+	@JoinColumn(name="role_id")
 	Role role;
 	/**
 	 * Begin date
