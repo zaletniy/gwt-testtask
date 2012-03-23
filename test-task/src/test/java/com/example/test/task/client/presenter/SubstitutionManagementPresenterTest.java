@@ -28,7 +28,6 @@ import com.example.test.task.client.event.UpdateDataEvent;
 import com.example.test.task.client.event.UpdateDataEventHandler;
 import com.example.test.task.client.view.StatusIndicator;
 import com.example.test.task.client.view.SubstitutionManagementView;
-import com.example.test.task.server.SubstitutionManagementServiceImpl;
 import com.example.test.task.shared.SubstitutionDetails;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
@@ -43,7 +42,13 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class SubstitutionManagementPresenterTest {
 	EventBus eventBus = new SimpleEventBus();
 	Messages messages = mock(Messages.class);
-	SubstitutionManagementServiceImpl serviceStub = new SubstitutionManagementServiceImpl();
+	
+	
+	//TODO: to think about more general approach of data definition
+	List<SubstitutionDetails> substitutions = Arrays
+			.asList(new SubstitutionDetails[] { new SubstitutionDetails(1, "name", "role",
+					"ruleType",  null, null) });
+	
 	@SuppressWarnings("unchecked")
 	SubstitutionManagementView<SubstitutionDetails> view = mock(SubstitutionManagementView.class);
 	SubstitutionManagementServiceAsync service = mock(SubstitutionManagementServiceAsync.class);
@@ -58,7 +63,7 @@ public class SubstitutionManagementPresenterTest {
 		presenter = new SubstitutionManagementPresenter(view, service, statusIndicator, eventBus, messages);
 
 		// reference data retrieving stubbing
-		AsyncMockStubber.callSuccessWith(serviceStub.getSubstitutions()).when(service)
+		AsyncMockStubber.callSuccessWith(substitutions).when(service)
 				.getSubstitutions(any(AsyncCallback.class));
 
 		// wiring checking
@@ -131,7 +136,7 @@ public class SubstitutionManagementPresenterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testOnDeleteActionHandling() {
-		doReturn(serviceStub.getSubstitutions()).when(view).getSelectedItems();
+		doReturn(substitutions).when(view).getSelectedItems();
 
 		AsyncMockStubber.callSuccessWith(Collections.EMPTY_LIST).when(service)
 				.deleteSubstitution(any(List.class), any(AsyncCallback.class));
@@ -149,7 +154,7 @@ public class SubstitutionManagementPresenterTest {
 	 */
 	@Test
 	public void testOnUpdateActionHandling() {
-		doReturn(serviceStub.getSubstitutions().subList(0, 1)).when(view).getSelectedItems();
+		doReturn(substitutions).when(view).getSelectedItems();
 
 		EventBus spyEventBus = spy(eventBus);
 
@@ -164,7 +169,7 @@ public class SubstitutionManagementPresenterTest {
 	 */
 	@Test
 	public void testOnUpdateActionHandlingNothingSelected() {
-		doReturn(serviceStub.getSubstitutions().subList(0, 0)).when(view).getSelectedItems();
+		doReturn(Collections.EMPTY_LIST).when(view).getSelectedItems();
 		doReturn("statusInternalError").when(messages).statusInternalError();
 		EventBus spyEventBus = spy(eventBus);
 
@@ -193,7 +198,7 @@ public class SubstitutionManagementPresenterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testOnUpdateEventHandling() {
-		doReturn(serviceStub.getSubstitutions()).when(view).getSelectedItems();
+		doReturn(substitutions).when(view).getSelectedItems();
 		eventBus.fireEvent(new UpdateDataEvent());
 		verify(view).setData(any(List.class));
 

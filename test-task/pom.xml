@@ -135,14 +135,6 @@
 			<groupId>javax.validation</groupId>
 			<artifactId>validation-api</artifactId>
 			<version>1.0.0.GA</version>
-			<scope>test</scope>
-		</dependency>
-		<dependency>
-			<groupId>javax.validation</groupId>
-			<artifactId>validation-api</artifactId>
-			<version>1.0.0.GA</version>
-			<classifier>sources</classifier>
-			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.mockito</groupId>
@@ -156,7 +148,6 @@
 			<version>5.1.18</version>
 		</dependency>
 	</dependencies>
-
 	<build>
 		<!-- Generate compiled stuff in the folder used for developing mode -->
 		<outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
@@ -265,6 +256,7 @@
 				<configuration>
 					<runTarget>testtask.html</runTarget>
 					<hostedWebapp>${webappDirectory}</hostedWebapp>
+		            <module>com.example.test.task.testtaskRoot</module>
 				</configuration>
 			</plugin>
 

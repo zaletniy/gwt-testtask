@@ -12,7 +12,9 @@ import static org.mockito.Mockito.spy;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -26,7 +28,13 @@ import com.example.test.task.client.event.UpdateDataEvent;
 import com.example.test.task.client.view.EditSubstitutionView;
 import com.example.test.task.client.view.StatusIndicator;
 import com.example.test.task.server.SubstitutionManagementServiceImpl;
+import com.example.test.task.shared.EditViewReferenceData;
+import com.example.test.task.shared.NamedData;
+import com.example.test.task.shared.Role;
+import com.example.test.task.shared.RuleType;
 import com.example.test.task.shared.Substitution;
+import com.example.test.task.shared.SubstitutionDetails;
+import com.example.test.task.shared.Substitutor;
 import com.google.gwt.event.shared.EventBus;
 import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -40,8 +48,17 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 public class EditSubstitutionPresenterTest {
 	EventBus eventBus = new SimpleEventBus();
 	Messages messages = mock(Messages.class);
-	SubstitutionManagementServiceImpl serviceStub = new SubstitutionManagementServiceImpl();
-
+	
+	EditViewReferenceData viewReferenceData = new EditViewReferenceData(
+			Arrays.asList(new NamedData[] { new Role(1, "testRole") }),
+			Arrays.asList(new NamedData[] { new Substitutor(2,
+					"TestSubstitutor") }),
+			Arrays.asList(new RuleType[] { new RuleType(3, "ruleType", false),new RuleType(4, "Interval", true) }));
+	
+	List<SubstitutionDetails> substitutions = Arrays
+			.asList(new SubstitutionDetails[] { new SubstitutionDetails(1, "name", "role",
+					"ruleType",  null, null) });
+	
 	EditSubstitutionView view = mock(EditSubstitutionView.class);
 	StatusIndicator statusIndicator = mock(StatusIndicator.class);
 	SubstitutionManagementServiceAsync service = mock(SubstitutionManagementServiceAsync.class);
@@ -54,10 +71,7 @@ public class EditSubstitutionPresenterTest {
 		presenter = new EditSubstitutionPresenter(eventBus, view, messages, statusIndicator, service);
 
 		// reference data retrieving stubbing
-		AsyncMockStubber.callSuccessWith(serviceStub.getAllNamedData()).when(service)
-				.getAllNamedData(any(AsyncCallback.class));
-
-		AsyncMockStubber.callSuccessWith(serviceStub.getAllNamedData()).when(service)
+		AsyncMockStubber.callSuccessWith(viewReferenceData).when(service)
 				.getAllNamedData(any(AsyncCallback.class));
 
 		AsyncMockStubber.callSuccessWith(24).when(service)
@@ -76,8 +90,9 @@ public class EditSubstitutionPresenterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testEditSubstitutionSaveDataValidationProblems() {
-		Substitution substitution = serviceStub.getSubstitution(1);
+		Substitution substitution = new Substitution(100, 2, 1, new RuleType(4,"ruleType",false),new Date(),new Date(System.currentTimeMillis()+100));
 		// item for editing retrieving
+		
 		AsyncMockStubber.callSuccessWith(substitution).when(service).getSubstitution(eq(1), any(AsyncCallback.class));
 
 		eventBus.fireEvent(new EditSubstitutionEvent(1));
@@ -140,6 +155,7 @@ public class EditSubstitutionPresenterTest {
 		verify(view).onDataSavingOk();
 
 	}
+	
 
 	/**
 	 * 
@@ -149,7 +165,8 @@ public class EditSubstitutionPresenterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testOnEndDataSetActionHandling() {
-		Substitution substitution = serviceStub.getSubstitution(1);
+		//Substitution substitution = serviceStub.getSubstitution(1);
+		Substitution substitution = new Substitution(100, 2, 1, new RuleType(4,"ruleType",false),new Date(),new Date(System.currentTimeMillis()+100));
 		// item for editing retrieving
 		AsyncMockStubber.callSuccessWith(substitution).when(service).getSubstitution(eq(1), any(AsyncCallback.class));
 
@@ -206,7 +223,9 @@ public class EditSubstitutionPresenterTest {
 		EventBus spyEventBus = spy(eventBus);
 		presenter = new EditSubstitutionPresenter(spyEventBus, view, messages, statusIndicator, service);
 
-		Substitution substitution = serviceStub.getSubstitution(1);
+
+		Substitution substitution = new Substitution(100, 2, 1, new RuleType(4,"ruleType",false),new Date(),new Date(System.currentTimeMillis()+100));
+
 		// item for editing retrieving
 		AsyncMockStubber.callSuccessWith(substitution).when(service).getSubstitution(eq(1), any(AsyncCallback.class));
 
@@ -240,7 +259,8 @@ public class EditSubstitutionPresenterTest {
 		EventBus spyEventBus = spy(eventBus);
 		presenter = new EditSubstitutionPresenter(spyEventBus, view, messages, statusIndicator, service);
 
-		Substitution substitution = serviceStub.getSubstitution(4);
+		//Substitution substitution = serviceStub.getSubstitution(4);
+		Substitution substitution = new Substitution(100, 2, 1, new RuleType(4,"ruleType",false),new Date(),new Date(System.currentTimeMillis()+100));
 		// item for editing retrieving
 		AsyncMockStubber.callSuccessWith(substitution).when(service).getSubstitution(eq(1), any(AsyncCallback.class));
 
@@ -271,11 +291,12 @@ public class EditSubstitutionPresenterTest {
 	@Test
 	public void testCreatingSubstitutionRule() {
 		eventBus.fireEvent(new CreateSubstitutionEvent());
-		Substitution substitution = serviceStub.getSubstitution(4);
+		//Substitution substitution = serviceStub.getSubstitution(4);
+		Substitution substitution = new Substitution(100, 2, 1, new RuleType(4,"ruleType",false),new Date(),new Date(System.currentTimeMillis()+100));
 
 		doReturn(substitution.getRoleId() + "").when(view).getRole();
 		doReturn(substitution.getSubstitutionNameId() + "").when(view).getSubstituror();
-		doReturn("1").when(view).getRuleType();
+		doReturn("3").when(view).getRuleType();
 		doReturn(new Date()).when(view).getBeginDate();
 		doReturn(new Date()).when(view).getEndDate();
 		presenter.onSaveAction();
@@ -290,11 +311,12 @@ public class EditSubstitutionPresenterTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testEditSubstitutionEditEventHandling() {
-
-		// item for editing retrieving
-		AsyncMockStubber.callSuccessWith(serviceStub.getSubstitution(4)).when(service)
-				.getSubstitution(eq(1), any(AsyncCallback.class));
-
+		Substitution substitution = new Substitution(100, 2, 1, new RuleType(4,"ruleType",false),new Date(),new Date(System.currentTimeMillis()+100));
+	
+		AsyncMockStubber.callSuccessWith(substitution).when(service)
+		.getSubstitution(eq(1), any(AsyncCallback.class));
+		
+		
 		eventBus.fireEvent(new EditSubstitutionEvent(4));
 
 		verify(service).getSubstitution(eq(4), any(AsyncCallback.class));
@@ -321,14 +343,14 @@ public class EditSubstitutionPresenterTest {
 
 		{// if selected non interval rule type
 			reset(view);
-			doReturn("1").when(view).getRuleType();
+			doReturn("3").when(view).getRuleType();
 			presenter.onRuleTypesSelection();
 			verify(view).setTimeIntervalEnabled(false);
 		}
 
 		{// if selected interval rule type
 			reset(view);
-			doReturn("2").when(view).getRuleType();
+			doReturn("4").when(view).getRuleType();
 			presenter.onRuleTypesSelection();
 			verify(view).setTimeIntervalEnabled(true);
 		}
@@ -361,5 +383,6 @@ public class EditSubstitutionPresenterTest {
 		eventBus.fireEvent(new EditSubstitutionEvent(1));
 		verify(statusIndicator).setErrorStatus("Server side problems");
 	}
+
 
 }

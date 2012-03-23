@@ -7,11 +7,11 @@ import javax.persistence.Entity;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.LazyToOneOption;
 
-import com.sun.istack.internal.NotNull;
 
 /**
  * The full model of substitution.
@@ -26,21 +26,21 @@ public class SubstitutionFull extends DataObject {
 	private static final long serialVersionUID = -6557329547359803832L;
 	
 	@OneToOne
-	@NotNull
 	@LazyToOne(LazyToOneOption.FALSE)
 	@JoinColumn(name="substitutor_id")
+	@NotNull
 	Substitutor substitutor;
 	
 	@OneToOne
-	@NotNull
 	@LazyToOne(LazyToOneOption.FALSE)
 	@JoinColumn(name="rule_type_id")
+	@NotNull
 	RuleType ruleType;
 	
 	@OneToOne
-	@NotNull
 	@LazyToOne(LazyToOneOption.FALSE)
 	@JoinColumn(name="role_id")
+	@NotNull
 	Role role;
 	/**
 	 * Begin date
