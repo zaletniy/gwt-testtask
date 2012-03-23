@@ -11,8 +11,9 @@ import org.springframework.stereotype.Repository;
  * The generic DAO.
  * 
  * @author Ilya Sviridov
- *
- * @param <T> the data object type
+ * 
+ * @param <T>
+ *            the data object type
  */
 @Repository("genericDAO")
 public class GenericDataDAO<T> {
@@ -22,7 +23,7 @@ public class GenericDataDAO<T> {
 
 	@PersistenceContext
 	EntityManager entityManager;
-	
+
 	public void save(T dataObject) {
 		entityManager.persist(dataObject);
 	}
@@ -30,8 +31,40 @@ public class GenericDataDAO<T> {
 	@SuppressWarnings("unchecked")
 	public List<T> findAll(Class<T> clazz) {
 		return entityManager.createQuery(
-				"select H  from " +clazz.getName() + " H")
-				.getResultList();
+				"select H  from " + clazz.getName() + " H").getResultList();
 	}
+
+	public T find(int id, Class<T> clazz) {
+		return entityManager.find(clazz, id);
+	}
+
+	public void merge(T object) {
+		entityManager.merge(object);
+	}
+
+	@SuppressWarnings("unchecked")
+	public T findFirstByParamener(Class<T> clazz, String name, Object value) {
+		return (T) entityManager
+				.createQuery(
+						"select H from " + clazz.getName()
+								+ " where H." + name + "= :" + name)
+				.setParameter(name, value).getSingleResult();
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public List<T> findByParamener(Class<T> clazz, String name, Object value) {
+		return entityManager
+				.createQuery(
+						"select H from " + clazz.getName()
+								+ " where H." + name + "= :" + name)
+				.setParameter(name, value).getResultList();
+
+	}
+	
+	public void delete(int id, Class<T> clazz){
+		entityManager.remove(find(id, clazz));
+	}
+	
 
 }

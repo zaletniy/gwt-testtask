@@ -3,8 +3,6 @@
  */
 package com.example.test.task.server.dao.management;
 
-import java.util.Date;
-
 import javax.annotation.PostConstruct;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -22,10 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.DefaultTransactionDefinition;
 
 import com.example.test.task.server.dao.GenericDataDAO;
-import com.example.test.task.shared.Role;
-import com.example.test.task.shared.RuleType;
-import com.example.test.task.shared.SubstitutionFull;
-import com.example.test.task.shared.Substitutor;
 
 /**
  * The class for patching database.
@@ -56,54 +50,18 @@ public class DatabasePatcher {
 	@PostConstruct
 	@Transactional(isolation=Isolation.SERIALIZABLE,propagation=Propagation.REQUIRED)
 	public void run(){
-		LOG.warn("TODO: Database patcher will check if database version is actual and will apply all needed patches in future. For now only data filling");
-		Substitutor substitutor1=new Substitutor();
-		substitutor1.setName("Ivan");
+		LOG.warn("Database patcher will check if database version is actual and will apply all needed patches in future. For now only data filling");
 		
-		Substitutor substitutor2=new Substitutor();
-		substitutor2.setName("Bob");
+		//TODO: to check if it works
+		//entityManager.getTransaction().begin();
+		//entityManager.getTransaction().commit();
 		
-		Substitutor substitutor3=new Substitutor();
-		substitutor3.setName("Joe");
-		
-		RuleType alwaysRuleType=new RuleType();
-		alwaysRuleType.setName("alwaysRuleType");
-		
-		RuleType intervalRuleType=new RuleType();
-		intervalRuleType.setName("intervalRuleType");
-		intervalRuleType.setInterval(true);
-		
-		RuleType inactiveRuleType=new RuleType();
-		inactiveRuleType.setName("inactiveRuleType");
-		
-		Role fullTimeRole=new Role();
-		fullTimeRole.setName("fullTimeRole");
-		
-		Role partTimeRole=new Role();
-		partTimeRole.setName("partTimeRole");
-		
-		SubstitutionFull substitutionFull1=new SubstitutionFull();
-		substitutionFull1.setRole(partTimeRole);
-		substitutionFull1.setRuleType(intervalRuleType);
-		substitutionFull1.setSubstitutor(substitutor1);
-		substitutionFull1.setBeginDate(new Date());
-		substitutionFull1.setEndDate(new Date(new Date().getTime()+1000));
 		
 		// the manual transaction 
 		TransactionDefinition definition=new DefaultTransactionDefinition();
 		TransactionStatus transactionStatus=transactionManager.getTransaction(definition);
-		genericDataDAO.save(partTimeRole);
-		genericDataDAO.save(fullTimeRole);
 		
-		genericDataDAO.save(intervalRuleType);
-		genericDataDAO.save(alwaysRuleType);
-		genericDataDAO.save(inactiveRuleType);
-		
-		genericDataDAO.save(substitutor1);
-		genericDataDAO.save(substitutor2);
-		genericDataDAO.save(substitutor3);
-		
-		genericDataDAO.save(substitutionFull1);
+		// any updates of DB on start should be here
 		transactionManager.commit(transactionStatus);
 		
 		LOG.debug("Initial data has been filled");

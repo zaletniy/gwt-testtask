@@ -16,7 +16,6 @@ import javax.persistence.UniqueConstraint;
  */
 @Entity
 @Table(uniqueConstraints={@UniqueConstraint(columnNames={"id","name"})})
-//FIXME: to make it abstract to avoid creating the table
 public class NamedData extends DataObject implements Serializable {
 	private static final long serialVersionUID = -3014279964664221172L;
 

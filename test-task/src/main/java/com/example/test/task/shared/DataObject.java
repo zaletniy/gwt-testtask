@@ -26,6 +26,7 @@ public abstract class DataObject implements Serializable {
 	@Id
 	@Column(name="id")
 	@GeneratedValue(strategy=GenerationType.TABLE)
+	
 	int id;
 
 	/**

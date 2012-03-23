@@ -9,11 +9,11 @@
 	</appender>
 
 	<logger name="org.hibernate">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 	
 	<logger name="org.springframework">
-		<level value="DEBUG" />
+		<level value="INFO" />
 	</logger>
 	
 	<logger name="com.example.test.task">

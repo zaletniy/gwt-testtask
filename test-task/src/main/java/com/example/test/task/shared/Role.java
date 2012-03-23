@@ -2,9 +2,10 @@ package com.example.test.task.shared;
 
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 @Entity
-@Table(name="role")
+@Table(name="role",uniqueConstraints={@UniqueConstraint(columnNames={"id","name"})})
 public class Role extends NamedData {
 	private static final long serialVersionUID = -790515412176678222L;
 

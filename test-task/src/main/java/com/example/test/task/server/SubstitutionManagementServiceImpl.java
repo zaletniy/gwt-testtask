@@ -1,12 +1,7 @@
 package com.example.test.task.server;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -19,9 +14,11 @@ import com.example.test.task.client.SubstitutionManagementService;
 import com.example.test.task.server.dao.GenericDataDAO;
 import com.example.test.task.shared.EditViewReferenceData;
 import com.example.test.task.shared.NamedData;
+import com.example.test.task.shared.Role;
 import com.example.test.task.shared.RuleType;
 import com.example.test.task.shared.Substitution;
 import com.example.test.task.shared.SubstitutionDetails;
+import com.example.test.task.shared.SubstitutionFull;
 import com.example.test.task.shared.Substitutor;
 import com.google.gwt.rpc.client.impl.RemoteException;
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
@@ -47,28 +44,6 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	private static final long serialVersionUID = 2442035806970897062L;
 
 	/**
-	 * Data
-	 */
-	public static Map<Integer, Substitution> data;
-
-	/**
-	 * Available substitutors
-	 */
-	public static NamedData[] substitutors = new NamedData[] { new NamedData(1, "Bob"), new NamedData(2, "Joe") };
-
-	/**
-	 * Available roles
-	 */
-	public static NamedData[] roles = new NamedData[] { new NamedData(1, "fullTimeRole"),
-			new NamedData(2, "partTimeRole") };
-
-	/**
-	 * Available rule types
-	 */
-	public static RuleType[] ruleTypes = new RuleType[] { new RuleType(1, "alwaysRuleType", false),
-			new RuleType(2, "intervalRuleType", true), new RuleType(3, "inactiveRuleType", true) };
-
-	/**
 	 * Id generator
 	 */
 	public static int idCounter = 100;
@@ -82,22 +57,24 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 			Thread.sleep(200);
 		} catch (InterruptedException e) {
 		}
-
-		List<SubstitutionDetails> substitutions = new ArrayList<SubstitutionDetails>();
-		for (Entry<Integer, Substitution> entry : getData().entrySet()) {
-			Substitution source = entry.getValue();
-			SubstitutionDetails substitutionDetails = new SubstitutionDetails();
-			substitutionDetails.setId(source.getId());
-			substitutionDetails.setName(getById(source.getSubstitutionNameId(), substitutors).getName());
-			substitutionDetails.setRole(getById(source.getRoleId(), roles).getName());
-			substitutionDetails.setRuleType(source.getRuleType().getName());
-			substitutionDetails.setBeginDate(source.getBeginDate());
-			substitutionDetails.setEndDate(source.getEndDate());
-
-			substitutions.add(substitutionDetails);
+		
+		List<SubstitutionFull>  subs= substitutionFullDAO.findAll(SubstitutionFull.class);
+		
+		List<SubstitutionDetails> detailsList=new ArrayList<SubstitutionDetails>();
+		for(SubstitutionFull substitutionFull:subs){
+			SubstitutionDetails details=new SubstitutionDetails();
+			details.setId(substitutionFull.getId());
+			details.setName(substitutionFull.getSubstitutor().getName());
+			details.setRole(substitutionFull.getRole().getName());
+			details.setRuleType(substitutionFull.getRuleType().getName());
+			details.setBeginDate(substitutionFull.getBeginDate());
+			details.setEndDate(substitutionFull.getEndDate());
+			
+			detailsList.add(details);
 		}
+		
+		return detailsList;
 
-		return substitutions;
 	}
 
 	/**
@@ -107,12 +84,19 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	 *            to save
 	 * @return id of saved item
 	 */
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public int saveSubstitution(Substitution substitution) throws RemoteException {
-		if (substitution.getId() <= 0) {
-			substitution.setId(idCounter++);
-		}
-		data.put(substitution.getId(), substitution);
-		return idCounter++;
+		SubstitutionFull substitutionFull=new SubstitutionFull();//substitutionFullDAO.find(substitution.getId(),SubstitutionFull.class);
+		substitutionFull.setId(substitution.getId());
+		substitutionFull.setRole(roleDAO.find(substitution.getRoleId(),Role.class));
+		substitutionFull.setRuleType(ruleTypeDAO.find(substitution.getRuleType().getId(),RuleType.class));
+		substitutionFull.setSubstitutor(substitutorDAO.find(substitution.getSubstitutionNameId(),Substitutor.class));
+		substitutionFull.setBeginDate(substitution.getBeginDate());
+		substitutionFull.setEndDate(substitution.getEndDate());
+		
+		substitutionFullDAO.merge(substitutionFull);
+		
+		return substitutionFull.getId();
 	}
 
 	/**
@@ -123,7 +107,17 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	 * @return Substitution object
 	 */
 	public Substitution getSubstitution(int id) throws RemoteException {
-		return getData().get(id);
+		
+		SubstitutionFull subFull=substitutionFullDAO.find(id, SubstitutionFull.class);
+		Substitution substitution=new Substitution();
+		substitution.setId(subFull.getId());
+		substitution.setRoleId(subFull.getRole().getId());
+		substitution.setRuleType(subFull.getRuleType());
+		substitution.setSubstitutionNameId(subFull.getSubstitutor().getId());
+		substitution.setBeginDate(subFull.getBeginDate());
+		substitution.setEndDate(subFull.getEndDate());
+		
+		return substitution;
 	}
 
 	/**
@@ -132,33 +126,12 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	 * @param ids
 	 * @return left substitutions
 	 */
+	@Transactional(propagation=Propagation.REQUIRED, rollbackFor=Exception.class)
 	public List<SubstitutionDetails> deleteSubstitution(List<Integer> ids) throws RemoteException {
 		for (Integer id : ids) {
-			getData().remove(id);
+			substitutionFullDAO.delete(id, SubstitutionFull.class);
 		}
 		return getSubstitutions();
-	}
-
-	/**
-	 * Cteares test data
-	 * 
-	 * @return data
-	 */
-	protected Map<Integer, Substitution> getData() {
-		if (data == null) {
-			data = new HashMap<Integer, Substitution>();
-			Substitution substitution1 = new Substitution(1, 1, 1, ruleTypes[1], new Date(), new Date());
-			Substitution substitution2 = new Substitution(2, 2, 1, ruleTypes[2], new Date(), new Date());
-			Substitution substitution3 = new Substitution(3, 2, 1, ruleTypes[2], new Date(), new Date());
-			Substitution substitution4 = new Substitution(4, 1, 1, ruleTypes[0], null, null);
-
-			data.put(substitution1.getId(), substitution1);
-			data.put(substitution2.getId(), substitution2);
-			data.put(substitution3.getId(), substitution3);
-			data.put(substitution4.getId(), substitution4);
-
-		}
-		return data;
 	}
 
 	/**
@@ -170,7 +143,9 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	//TODO use generics with ?
 	public EditViewReferenceData getAllNamedData() {
 		List<? extends NamedData> substitutors=substitutorDAO.findAll(Substitutor.class);
-		return new EditViewReferenceData(Arrays.asList(roles),(List<NamedData>)substitutors, Arrays.asList(ruleTypes));
+		List<? extends NamedData> roles=roleDAO.findAll(Role.class);
+		List<RuleType> ruleTypes=ruleTypeDAO.findAll(RuleType.class);
+		return new EditViewReferenceData((List<NamedData>)roles,(List<NamedData>)substitutors,ruleTypes);
 	}
 
 	/**
@@ -187,6 +162,15 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	@Autowired
 	GenericDataDAO<Substitutor> substitutorDAO;
 	
+	@Autowired
+	GenericDataDAO<SubstitutionFull> substitutionFullDAO;
+	
+	@Autowired
+	GenericDataDAO<Role> roleDAO;
+	
+	@Autowired
+	GenericDataDAO<RuleType> ruleTypeDAO;
+	
 
 	/* (non-Javadoc)
 	 * @see com.example.test.task.client.SubstitutionManagementService#getAllSubstitutors()
@@ -202,8 +186,5 @@ public class SubstitutionManagementServiceImpl extends RemoteServiceServlet impl
 	public void saveSubstititor(Substitutor substitutor)throws Exception {
 		substitutorDAO.save(substitutor);
 	}
-	
-	
-	
 	
 }

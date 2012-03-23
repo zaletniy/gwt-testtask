@@ -5,6 +5,7 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import javax.persistence.UniqueConstraint;
 
 import org.hibernate.annotations.Type;
 
@@ -16,7 +17,7 @@ import org.hibernate.annotations.Type;
  * 
  */
 @Entity
-@Table(name = "rule_type")
+@Table(name = "rule_type",uniqueConstraints={@UniqueConstraint(columnNames={"id","name"})})
 public class RuleType extends NamedData implements Serializable {
 
 	private static final long serialVersionUID = -4651772996557673291L;

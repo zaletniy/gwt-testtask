@@ -3,6 +3,7 @@ package com.example.test.task.shared;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.SecondaryTable;
@@ -17,14 +18,15 @@ import javax.persistence.Table;
  */
 //TODO
 //@Entity
-//@Table(name = "substitution_details")
-//@SecondaryTables({ @SecondaryTable(name = "substitutor", pkJoinColumns = { @PrimaryKeyJoinColumn(columnDefinition = "", referencedColumnName = "") }) })
+//@Table(name="substitution")
+//@SecondaryTables({ @SecondaryTable(name = "substitutor", pkJoinColumns = { @PrimaryKeyJoinColumn(name="substitutor_id") }) })
 public class SubstitutionDetails extends DataObject implements Serializable {
 	private static final long serialVersionUID = -9127568820814721368L;
 
 	/**
 	 * Name
 	 */
+	@Column(table = "substitutor", name = "name")
 	String name;
 
 	/**
