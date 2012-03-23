@@ -28,6 +28,7 @@
 		<hibernate.connection.url>jdbc:mysql://localhost:3306/testtask</hibernate.connection.url>
 		<hibernate.connection.username>testtask</hibernate.connection.username>
 		<hibernate.connection.password>testtask</hibernate.connection.password>
+		<hibernate.showsql>false</hibernate.showsql>
 	</properties>
 
 	<repositories>
